@@ -91,14 +91,18 @@ class ViewController: UIViewController {
         canvas.layer.cornerRadius = neumorphView.layer.cornerRadius
         canvas.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
 
-        AddLabel(font: UIFont(name: "AvenirNext-DemiBold", size: 36)!, frame: CGRect(x: 20, y: 80, width: 200, height: 36), textColor: UIColor.black, Text: "Welcome!", viewToAdd: self.view)
+        // Welcome Text
+        AddLabel(font: UIFont(name: "AvenirNext-DemiBold", size: 36)!, frame: CGRect(x: 0, y: 80, width: 200, height: 36), textColor: UIColor.black, Text: "Welcome!", viewToAdd: self.view)
         AddLabel(font: UIFont(name: "AvenirNext-Regular", size: 16)!, frame: CGRect(x: 25, y: 130, width: 300, height: 50), textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board to start drawing", viewToAdd: self.view)
         // Save button
-        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 100, y: 750, width: 200, height: 40), titleText: "Save Canvas", viewToAdd: self.view, buttonBGColor: nil)
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 100, y: 750, width: 200, height: 40), titleText: "Save Canvas", viewToAdd: self.view, buttonBGColor: nil, autoAdjustFont: false)
         // Clear Button
-        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 150, y: 700, width: 100, height: 30), titleText: "Clear", viewToAdd: self.view, buttonBGColor: nil)
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 150, y: 700, width: 100, height: 30), titleText: "Clear", viewToAdd: self.view, buttonBGColor: nil, autoAdjustFont: false)
         // Undo Button
-        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 + 50, y: 700, width: 100, height: 30), titleText: "Undo", viewToAdd: self.view, buttonBGColor:  nil)
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 + 50, y: 700, width: 100, height: 30), titleText: "Undo", viewToAdd: self.view, buttonBGColor:  nil, autoAdjustFont: false)
+        
+        // Share Button
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 + 40, y: 80, width: 100, height: 40), titleText: "  Share Canvas  ", viewToAdd: self.view, buttonBGColor: nil, autoAdjustFont: true)
 
         
         // Adding color palatte buttons here
@@ -126,9 +130,6 @@ class ViewController: UIViewController {
         
         //Let's customise the 'track' and 'thumb' of the slider to neumorphic view
         
-    
-        strokeSlider.setThumbImage(UIImage(), for: .normal)
-        
         //Stroke Slider Events
         strokeSlider.addTarget(self, action: #selector(ViewController.sliderValueChanged(_:)), for: .valueChanged)
     }
@@ -137,61 +138,12 @@ class ViewController: UIViewController {
         canvas.strokeColor  = colorPalette[sender.tag]
     }
     
-    // MARK: Event handling functions
-    
-    @objc func pressed(sender: UIButton!) {
-        print("Button pressed")
-        sender.subviews[0].removeFromSuperview()
-        if(sender.isHighlighted){
-            let innerNueView = UIView()
-            innerNueView.frame = CGRect(x: 0, y: 0, width: sender.frame.width, height: sender.frame.height)
-            innerNueView.layer.cornerRadius = 25
-            innerNueView.addInnerShadow(onSide: .bottomAndRight, shadowColor: UIColor.white, shadowSize: 10, shadowOpacity: 0.7)
-            innerNueView.addInnerShadow(onSide: .topAndLeft, shadowColor: UIColor.black, shadowSize: 10, shadowOpacity: 0.2)
-            innerNueView.isUserInteractionEnabled = false
-            sender.addSubview(innerNueView)
-       sender.setTitle(sender.titleLabel?.text, for: .highlighted)
-        }
-        if(sender.titleLabel?.text == "Save Canvas"){
-//            sender.setTitle(sender.titleLabel?.text, for: .highlighted)
-//            CanvasBoard.saveImage()
-        }
-        else if(sender.titleLabel?.text == "Clear"){
-            print("Clearing Canvas....")
-            canvas.clearCanvas()
-            canvas.setNeedsDisplay()
-        }
-        else if(sender.titleLabel?.text == "Undo"){
-            print("Undoing last line in Canvas....")
-            if(canvas.lines.count > 0){
-                canvas.lines.removeLast()
-            }
-            canvas.setNeedsDisplay()
-        }
-    }
-    
-    @objc func released(sender: UIButton!) {
-        print("Button released")
-        print(sender.subviews)
-        sender.subviews[1].removeFromSuperview()
-        let buttonNeuView = NeumorphicVIew(frame: CGRect(x: 0, y: 0, width: sender.frame.width, height: sender.frame.height))
-        buttonNeuView.isUserInteractionEnabled = false
-        sender.addSubview(buttonNeuView)
-        print(sender.subviews)
-        sender.bringSubviewToFront(sender.subviews[0])
-        sender.setTitle(sender.titleLabel?.text, for: .highlighted)
-        if(sender.titleLabel?.text == "Save Canvas"){
-            sender.setTitle(sender.titleLabel?.text, for: .highlighted)
-            
-        }
-    }
-    
-    @objc func sliderValueChanged(_ sender:UISlider){
-        canvas.strokeWidth = sender.value
-    }
     
     
-    //MARK: - Programatic UI
+    
+    
+    
+    //MARK:- Programatic UI
     
     /**
     Draws a personalized UI label.
@@ -246,13 +198,17 @@ class ViewController: UIViewController {
     - Parameter titleText : The text to display on the button.
     - Parameter viewToAdd : The view to which the UIButton should be added.
     - Parameter buttonBGColor : Set the background color of the button, nil defaults to view bg color
+    - Parameter autoAdjustFont : To either adjust the UIButton text dynamically or not
      
     - Returns: (Void) Draws a UIButton in the view specified with the given customisations.
     */
-    func AddButton(titleColor : UIColor, frame : CGRect, titleText : String, viewToAdd : UIView, buttonBGColor : UIColor?){
+    func AddButton(titleColor : UIColor, frame : CGRect, titleText : String, viewToAdd : UIView, buttonBGColor : UIColor?, autoAdjustFont : Bool){
         let prgrmButton = UIButton()
 //        (red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         prgrmButton.setTitleColor(titleColor, for: .normal)
+        prgrmButton.titleLabel?.adjustsFontSizeToFitWidth = autoAdjustFont
+        prgrmButton.titleLabel?.numberOfLines = 1
+        prgrmButton.titleLabel?.minimumScaleFactor = 0.6
         prgrmButton.addTarget(self, action: #selector(ViewController.pressed(sender:)), for: [.touchDown])
         prgrmButton.addTarget(self, action: #selector(ViewController.released(sender:)), for: [.touchUpInside])
         let buttonNeuView = NeumorphicVIew(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
@@ -261,7 +217,57 @@ class ViewController: UIViewController {
         prgrmButton.addSubview(buttonNeuView)
         prgrmButton.setTitle(titleText, for: .normal)
         viewToAdd.addSubview(prgrmButton)
-    
+        prgrmButton.bringSubviewToFront(prgrmButton.titleLabel! )
     }
 
+    // MARK:- Event handling functions
+        
+        @objc func pressed(sender: UIButton!) {
+            print("Button pressed")
+            sender.subviews[0].removeFromSuperview()
+            if(sender.isHighlighted){
+                let innerNueView = UIView()
+                innerNueView.frame = CGRect(x: 0, y: 0, width: sender.frame.width, height: sender.frame.height)
+                innerNueView.layer.cornerRadius = 25
+                innerNueView.addInnerShadow(onSide: .bottomAndRight, shadowColor: UIColor.white, shadowSize: 10, shadowOpacity: 0.7)
+                innerNueView.addInnerShadow(onSide: .topAndLeft, shadowColor: UIColor.black, shadowSize: 10, shadowOpacity: 0.2)
+                innerNueView.isUserInteractionEnabled = false
+                sender.addSubview(innerNueView)
+           sender.setTitle(sender.titleLabel?.text, for: .highlighted)
+            }
+            if(sender.titleLabel?.text == "Save Canvas"){
+    //            CanvasBoard.saveImage()
+            }
+            else if(sender.titleLabel?.text == "Clear"){
+                print("Clearing Canvas....")
+                canvas.clearCanvas()
+                canvas.setNeedsDisplay()
+            }
+            else if(sender.titleLabel?.text == "Undo"){
+                print("Undoing last line in Canvas....")
+                if(canvas.lines.count > 0){
+                    canvas.lines.removeLast()
+                }
+                canvas.setNeedsDisplay()
+            }
+        }
+        
+        @objc func released(sender: UIButton!) {
+            print("Button released")
+            print(sender.subviews)
+            sender.subviews[1].removeFromSuperview()
+            let buttonNeuView = NeumorphicVIew(frame: CGRect(x: 0, y: 0, width: sender.frame.width, height: sender.frame.height))
+            buttonNeuView.isUserInteractionEnabled = false
+            sender.addSubview(buttonNeuView)
+            print(sender.subviews)
+            sender.bringSubviewToFront(sender.subviews[0])
+            sender.setTitle(sender.titleLabel?.text, for: .highlighted)
+            if(sender.titleLabel?.text == "Save Canvas"){
+                sender.setTitle(sender.titleLabel?.text, for: .highlighted)
+            }
+        }
+        
+        @objc func sliderValueChanged(_ sender:UISlider){
+            canvas.strokeWidth = sender.value
+        }
 }
