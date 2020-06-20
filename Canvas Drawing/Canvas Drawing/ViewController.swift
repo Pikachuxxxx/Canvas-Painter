@@ -102,9 +102,8 @@ class ViewController: UIViewController {
 
         
         // Adding color palatte buttons here
-        
+        // TODO: Embed the palette buttons in a Stack View
         for (index,color) in colorPalette.enumerated(){
-            print(index)
             let circlePalette = UIButton(type: .custom)
             circlePalette.layer.cornerRadius = 15
             circlePalette.showsTouchWhenHighlighted = true
@@ -114,11 +113,25 @@ class ViewController: UIViewController {
             self.view.addSubview(circlePalette)
             circlePalette.tag = index
         }
+        
+        // Slider (Neumorphic style)
+        // TODO : Make a customisable standalone function
+        let strokeSlider = UISlider()
+        strokeSlider.minimumValue = 1
+        strokeSlider.maximumValue = 10
+        strokeSlider.isContinuous = true
+        strokeSlider.tintColor = UIColor.black
+        strokeSlider.frame = CGRect(x: 30 , y: 660 , width: 300, height: 30)
+        self.view.addSubview(strokeSlider)
+        //Stroke Slider Events
+        strokeSlider.addTarget(self, action: #selector(ViewController.sliderValueChanged(_:)), for: .valueChanged)
     }
 
     @objc func colorSelected(sender : UIButton){
         canvas.strokeColor  = colorPalette[sender.tag]
     }
+    
+    // MARK: Event handling functions
     
     @objc func pressed(sender: UIButton!) {
         print("Button pressed")
@@ -167,7 +180,9 @@ class ViewController: UIViewController {
         }
     }
     
-    
+    @objc func sliderValueChanged(_ sender:UISlider){
+        canvas.strokeWidth = sender.value
+    }
     
     
     //MARK: - Programatic UI
