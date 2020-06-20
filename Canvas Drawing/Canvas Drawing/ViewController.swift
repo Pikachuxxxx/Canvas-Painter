@@ -86,41 +86,10 @@ class ViewController: UIViewController {
         AddLabel(font: UIFont(name: "AvenirNext-DemiBold", size: 36)!, frame: CGRect(x: 20, y: 80, width: 200, height: 36), textColor: UIColor.black, Text: "Welcome!", viewToAdd: self.view)
         AddLabel(font: UIFont(name: "AvenirNext-Regular", size: 16)!, frame: CGRect(x: 25, y: 130, width: 300, height: 50), textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board to start drawing", viewToAdd: self.view)
         
-        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 100, y: 700, width: 200, height: 50), titelText: "Save Canvas", viewToAdd: self.view)
-//        self.view.frame.width / 2 - 100
-//        let saveButton = UIButton()
-//        saveButton.setTitleColor(#colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), for: .normal)
-//        saveButton.addTarget(self, action: #selector(ViewController.pressed(sender:)), for: [.touchDown])
-//        saveButton.addTarget(self, action: #selector(ViewController.released(sender:)), for: [.touchUpInside])
-//        let buttonNeuView = NeumorphicVIew(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
-//        buttonNeuView.isUserInteractionEnabled = false
-//        saveButton.frame = CGRect(x: self.view.frame.width / 2 - 100, y: 700, width: buttonNeuView.frame.width, height: buttonNeuView.frame.height)
-//        saveButton.addSubview(buttonNeuView)
-//        saveButton.setTitle("Save Canvas", for: .normal)
-//        self.view.addSubview(saveButton)
-        
-        let clearButton = UIButton()
-        clearButton.setTitleColor( UIColor(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), for: .normal)
-        clearButton.addTarget(self, action: #selector(ViewController.pressed(sender:)), for: [.touchDown])
-        clearButton.addTarget(self, action: #selector(ViewController.released(sender:)), for: [.touchUpInside])
-        let clearbuttonNeuView = NeumorphicVIew(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
-        clearbuttonNeuView.isUserInteractionEnabled = false
-        clearButton.frame = CGRect(x: self.view.frame.width / 2 - 150, y: 650, width: clearbuttonNeuView.frame.width, height: clearbuttonNeuView.frame.height)
-        clearButton.addSubview(clearbuttonNeuView)
-        clearButton.setTitle("Clear", for: .normal)
-        self.view.addSubview(clearButton)
-        
-        let undoButton = UIButton()
-        undoButton.setTitleColor( UIColor(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), for: .normal)
-        undoButton.addTarget(self, action: #selector(ViewController.pressed(sender:)), for: [.touchDown])
-        undoButton.addTarget(self, action: #selector(ViewController.released(sender:)), for: [.touchUpInside])
-        let undobuttonNeuView = NeumorphicVIew(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
-        undobuttonNeuView.isUserInteractionEnabled = false
-        undoButton.frame = CGRect(x: self.view.frame.width / 2 + 50, y: 650, width: undobuttonNeuView.frame.width, height: undobuttonNeuView.frame.height)
-        undoButton.addSubview(undobuttonNeuView)
-        undoButton.setTitle("Undo", for: .normal)
-        self.view.addSubview(undoButton)
-                
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 100, y: 700, width: 200, height: 50), titleText: "Save Canvas", viewToAdd: self.view)
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 150, y: 650, width: 100, height: 30), titleText: "Clear", viewToAdd: self.view)
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 + 50, y: 650, width: 100, height: 30), titleText: "Undo", viewToAdd: self.view)
+
     }
 
     
@@ -197,21 +166,18 @@ class ViewController: UIViewController {
     }
     
     /**
-    Creates a personalized greeting for a recipient.
+    Creates a personalized UI Button in Neumorphic Style.
 
     - Parameter titleColor: The colour of the text.
     - Parameter frame : The dimensions of the button.
     - Parameter titleText : The text to display on the button.
-
-    - Throws: `MyError.invalidRecipient`
-              if `recipient` is "Derek"
-              (he knows what he did).
-
-    - Returns: Draws a UIButton in the view specified with the given configurations.
+    - Parameter viewToAdd : The view to which the UIButton should be added.
+     
+    - Returns: Draws a UIButton in the view specified with the given customisations.
     */
-    func AddButton(titleColor : UIColor, frame : CGRect, titelText : String, viewToAdd : UIView){
+    func AddButton(titleColor : UIColor, frame : CGRect, titleText : String, viewToAdd : UIView){
         let saveButton = UIButton()
-//        saveButton.setTitleColor(#colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), for: .normal)
+//        (red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         saveButton.setTitleColor(titleColor, for: .normal)
         saveButton.addTarget(self, action: #selector(ViewController.pressed(sender:)), for: [.touchDown])
         saveButton.addTarget(self, action: #selector(ViewController.released(sender:)), for: [.touchUpInside])
@@ -219,7 +185,7 @@ class ViewController: UIViewController {
         buttonNeuView.isUserInteractionEnabled = false
         saveButton.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: buttonNeuView.frame.width, height: buttonNeuView.frame.height)
         saveButton.addSubview(buttonNeuView)
-        saveButton.setTitle(titelText, for: .normal)
+        saveButton.setTitle(titleText, for: .normal)
         viewToAdd.addSubview(saveButton)
     }
 
