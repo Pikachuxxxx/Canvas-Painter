@@ -8,37 +8,44 @@
 
 import UIKit
 
+struct Line {
+    let width : CGFloat
+    let color : CGColor
+    var points : [CGPoint]
+}
 class Canvas: UIView {
     
+    var strokeColor : UIColor = UIColor.black
+    var strokeWidth : Float = 1
+
+    
     override func draw(_ rect: CGRect) {
-        // custom drawing
+        // Custom Drawing
         super.draw(rect)
         
         guard let context = UIGraphicsGetCurrentContext() else { return }
-
-        
-        context.setStrokeColor(UIColor.yellow.cgColor)
-        context.setLineWidth(10)
-        context.setLineCap(.round)
-        
         lines.forEach { (line) in
-            for (i, p) in line.enumerated() {
+            for (i, p) in line.points.enumerated() {
+                context.setStrokeColor(line.color)
+                context.setLineWidth(line.width)
+                context.setLineCap(.round)
                 if i == 0 {
                     context.move(to: p)
                 } else {
                     context.addLine(to: p)
                 }
             }
+             context.strokePath()
         }
         
-        context.strokePath()
+       
         
     }
 
-    var lines = [[CGPoint]]()
+    var lines = [Line]()
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        lines.append([CGPoint]())
+        lines.append(Line.init(width: CGFloat(strokeWidth), color: strokeColor.cgColor, points: []))
     }
     
     // track the finger as we move across screen
@@ -47,7 +54,7 @@ class Canvas: UIView {
 //        print(point)
         
         guard var lastLine = lines.popLast() else { return }
-        lastLine.append(point)
+        lastLine.points.append(point)
         lines.append(lastLine)
 
         setNeedsDisplay()
@@ -64,6 +71,7 @@ class ViewController: UIViewController {
 
     var CanvasBoard = NeumorphicVIew()
     
+    let colorPalette : [UIColor] = [UIColor.black,UIColor.blue,UIColor.white,UIColor.green,UIColor.orange,UIColor.purple,UIColor.red,UIColor.yellow]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,13 +93,32 @@ class ViewController: UIViewController {
 
         AddLabel(font: UIFont(name: "AvenirNext-DemiBold", size: 36)!, frame: CGRect(x: 20, y: 80, width: 200, height: 36), textColor: UIColor.black, Text: "Welcome!", viewToAdd: self.view)
         AddLabel(font: UIFont(name: "AvenirNext-Regular", size: 16)!, frame: CGRect(x: 25, y: 130, width: 300, height: 50), textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board to start drawing", viewToAdd: self.view)
-        
-        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 100, y: 700, width: 200, height: 50), titleText: "Save Canvas", viewToAdd: self.view)
-        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 150, y: 650, width: 100, height: 30), titleText: "Clear", viewToAdd: self.view)
-        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 + 50, y: 650, width: 100, height: 30), titleText: "Undo", viewToAdd: self.view)
+        // Save button
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 100, y: 750, width: 200, height: 40), titleText: "Save Canvas", viewToAdd: self.view, buttonBGColor: nil)
+        // Clear Button
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 150, y: 700, width: 100, height: 30), titleText: "Clear", viewToAdd: self.view, buttonBGColor: nil)
+        // Undo Button
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 + 50, y: 700, width: 100, height: 30), titleText: "Undo", viewToAdd: self.view, buttonBGColor:  nil)
 
+        
+        // Adding color palatte buttons here
+        
+        for (index,color) in colorPalette.enumerated(){
+            print(index)
+            let circlePalette = UIButton(type: .custom)
+            circlePalette.layer.cornerRadius = 15
+            circlePalette.showsTouchWhenHighlighted = true
+            circlePalette.backgroundColor = color
+            circlePalette.addTarget(self, action: #selector(ViewController.colorSelected(sender:)), for: [.touchDown])
+            circlePalette.frame = CGRect(x: 30 + (40*index), y: 620 , width: 30, height: 30)
+            self.view.addSubview(circlePalette)
+            circlePalette.tag = index
+        }
     }
 
+    @objc func colorSelected(sender : UIButton){
+        canvas.strokeColor  = colorPalette[sender.tag]
+    }
     
     @objc func pressed(sender: UIButton!) {
         print("Button pressed")
@@ -104,10 +131,11 @@ class ViewController: UIViewController {
             innerNueView.addInnerShadow(onSide: .topAndLeft, shadowColor: UIColor.black, shadowSize: 10, shadowOpacity: 0.2)
             innerNueView.isUserInteractionEnabled = false
             sender.addSubview(innerNueView)
+       sender.setTitle(sender.titleLabel?.text, for: .highlighted)
         }
         if(sender.titleLabel?.text == "Save Canvas"){
-            sender.setTitle(sender.titleLabel?.text, for: .highlighted)
-            CanvasBoard.saveImage()
+//            sender.setTitle(sender.titleLabel?.text, for: .highlighted)
+//            CanvasBoard.saveImage()
         }
         else if(sender.titleLabel?.text == "Clear"){
             print("Clearing Canvas....")
@@ -132,8 +160,10 @@ class ViewController: UIViewController {
         sender.addSubview(buttonNeuView)
         print(sender.subviews)
         sender.bringSubviewToFront(sender.subviews[0])
+        sender.setTitle(sender.titleLabel?.text, for: .highlighted)
         if(sender.titleLabel?.text == "Save Canvas"){
             sender.setTitle(sender.titleLabel?.text, for: .highlighted)
+            
         }
     }
     
@@ -141,6 +171,18 @@ class ViewController: UIViewController {
     
     
     //MARK: - Programatic UI
+    
+    /**
+    Draws a personalized UI label.
+
+    - Parameter font: The font of the text in a UIFont object.
+    - Parameter frame : The dimensions of the UILabel in a CGRect object.
+    - Parameter textColor : The color of the text to display on the Label.
+    - Parameter Text : The text to display.
+    -  Parameter viewToAdd : The view in which the label should be added to.
+     
+    - Returns: (Void) Draws a UILabel with custom configurations in the view specified.
+    */
     func AddLabel(font : UIFont, frame : CGRect, textColor : UIColor, Text : String, viewToAdd : UIView){
         let prgmLabel: UILabel = UILabel()
         prgmLabel.font = font
@@ -153,6 +195,16 @@ class ViewController: UIViewController {
         viewToAdd.addSubview(prgmLabel)
     }
     
+    /**
+    Creates and returns a personalized UI label.
+
+    - Parameter font: The font of the text in a UIFont object.
+    - Parameter frame : The dimensions of the UILabel in a CGRect object.
+    - Parameter textColor : The color of the text to display on the Label.
+    - Parameter Text : The text to display.
+     
+    - Returns: UILabel with custom configurations.
+    */
     func GetLabel(font : UIFont, frame : CGRect, textColor : UIColor, Text : String) -> UILabel{
         let prgmLabel: UILabel = UILabel()
         prgmLabel.font = font
@@ -166,28 +218,29 @@ class ViewController: UIViewController {
     }
     
     /**
-    Creates a personalized UI Button in Neumorphic Style.
+    Draws a personalized UI Button in Neumorphic Style.
 
     - Parameter titleColor: The colour of the text.
     - Parameter frame : The dimensions of the button.
     - Parameter titleText : The text to display on the button.
     - Parameter viewToAdd : The view to which the UIButton should be added.
+    - Parameter buttonBGColor : Set the background color of the button, nil defaults to view bg color
      
-    - Returns: Draws a UIButton in the view specified with the given customisations.
+    - Returns: (Void) Draws a UIButton in the view specified with the given customisations.
     */
-    func AddButton(titleColor : UIColor, frame : CGRect, titleText : String, viewToAdd : UIView){
-        let saveButton = UIButton()
+    func AddButton(titleColor : UIColor, frame : CGRect, titleText : String, viewToAdd : UIView, buttonBGColor : UIColor?){
+        let prgrmButton = UIButton()
 //        (red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-        saveButton.setTitleColor(titleColor, for: .normal)
-        saveButton.addTarget(self, action: #selector(ViewController.pressed(sender:)), for: [.touchDown])
-        saveButton.addTarget(self, action: #selector(ViewController.released(sender:)), for: [.touchUpInside])
+        prgrmButton.setTitleColor(titleColor, for: .normal)
+        prgrmButton.addTarget(self, action: #selector(ViewController.pressed(sender:)), for: [.touchDown])
+        prgrmButton.addTarget(self, action: #selector(ViewController.released(sender:)), for: [.touchUpInside])
         let buttonNeuView = NeumorphicVIew(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
         buttonNeuView.isUserInteractionEnabled = false
-        saveButton.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: buttonNeuView.frame.width, height: buttonNeuView.frame.height)
-        saveButton.addSubview(buttonNeuView)
-        saveButton.setTitle(titleText, for: .normal)
-        viewToAdd.addSubview(saveButton)
+        prgrmButton.frame = CGRect(x: frame.origin.x, y: frame.origin.y, width: buttonNeuView.frame.width, height: buttonNeuView.frame.height)
+        prgrmButton.addSubview(buttonNeuView)
+        prgrmButton.setTitle(titleText, for: .normal)
+        viewToAdd.addSubview(prgrmButton)
+    
     }
 
 }
-
