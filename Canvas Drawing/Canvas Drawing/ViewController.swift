@@ -114,7 +114,7 @@ class ViewController: UIViewController {
             circlePalette.tag = index
         }
         
-        // Slider (Neumorphic style)
+    // Slider (Neumorphic style)
         // TODO : Make a customisable standalone function
         let strokeSlider = UISlider()
         strokeSlider.minimumValue = 1
@@ -123,6 +123,12 @@ class ViewController: UIViewController {
         strokeSlider.tintColor = UIColor.black
         strokeSlider.frame = CGRect(x: 30 , y: 660 , width: 300, height: 30)
         self.view.addSubview(strokeSlider)
+        
+        //Let's customise the 'track' and 'thumb' of the slider to neumorphic view
+        
+    
+        strokeSlider.setThumbImage(UIImage(), for: .normal)
+        
         //Stroke Slider Events
         strokeSlider.addTarget(self, action: #selector(ViewController.sliderValueChanged(_:)), for: .valueChanged)
     }

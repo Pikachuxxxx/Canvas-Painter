@@ -156,7 +156,7 @@ extension UIView{
         clipsToBounds = true
     }
     
-    func takeSnapshot() -> UIImage? {
+    public func takeSnapshot() -> UIImage? {
         UIGraphicsBeginImageContext(CGSize(width: self.frame.size.width, height: self.frame.size.height - 5))
         let rect = CGRect(x: 0.0, y: 0.0, width: self.frame.size.width, height: self.frame.size.height)
         drawHierarchy(in: rect, afterScreenUpdates: true)
@@ -173,6 +173,24 @@ extension UIImage {
         DispatchQueue.global(qos: .userInitiated).async {
             UIImageWriteToSavedPhotosAlbum(self, completionTarget, completionSelector, nil)
         }
+    }
+    
+    // image with rounded corners
+    public func withRoundedCorners(radius: CGFloat? = nil) -> UIImage? {
+        let maxRadius = min(size.width, size.height) / 2
+        let cornerRadius: CGFloat
+        if let radius = radius, radius > 0 && radius <= maxRadius {
+            cornerRadius = radius
+        } else {
+            cornerRadius = maxRadius
+        }
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        let rect = CGRect(origin: .zero, size: size)
+        UIBezierPath(roundedRect: rect, cornerRadius: cornerRadius).addClip()
+        draw(in: rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
     }
 }
 
