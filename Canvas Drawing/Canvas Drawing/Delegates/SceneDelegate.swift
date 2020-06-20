@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
            self.window = UIWindow(windowScene: windowScene)
              self.window?.makeKeyAndVisible()
         
-        let entryVC = ViewController()
+        let entryVC = CanvasDrawVC()
         self.window?.rootViewController = entryVC
     }
 
