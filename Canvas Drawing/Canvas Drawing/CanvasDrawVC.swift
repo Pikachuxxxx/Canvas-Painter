@@ -25,22 +25,19 @@ class Canvas: UIView {
         
         guard let context = UIGraphicsGetCurrentContext() else { return }
         lines.forEach { (line) in
-            for (i, p) in line.points.enumerated() {
-                context.setStrokeColor(line.color)
-                context.setLineWidth(line.width)
-                context.setLineCap(.round)
-                if i == 0 {
-                    context.move(to: p)
-                } else {
-                    context.addLine(to: p)
-                }
+        for (i, p) in line.points.enumerated() {
+            context.setStrokeColor(line.color)
+            context.setLineWidth(line.width)
+            context.setLineCap(.round)
+            if i == 0 {
+                context.move(to: p)
+            } else {
+                context.addLine(to: p)
             }
-             context.strokePath()
         }
-        
-       
-        
+         context.strokePath()
     }
+}
 
     var lines = [Line]()
     
@@ -218,7 +215,7 @@ class CanvasDrawVC: UIViewController {
     }
     // MARK:- Event handling functions
     /**
-    The event function when any of the button is pressed
+     The event function when any of the button is pressed
     */
     @objc func pressed(sender: UIButton!) {
         print("Button pressed")
@@ -278,7 +275,7 @@ class CanvasDrawVC: UIViewController {
         }
     }
     /**
-    The event function when any of the button is released
+     The event function when any of the button is released
     */
     @objc func released(sender: UIButton!) {
         print("Button released")
@@ -293,16 +290,17 @@ class CanvasDrawVC: UIViewController {
         if(sender.titleLabel?.text == "Save Canvas"){
             sender.setTitle(sender.titleLabel?.text, for: .highlighted)
         }
-    }/**
-    The event function when the slider is moved
+    }
+    /**
+     The event function when the slider is moved
     */
     @objc func sliderValueChanged(_ sender:UISlider){
         canvas.strokeWidth = sender.value
     }
     /**
-    The event function when any of the color is pressed
+     The event function when any of the color is pressed
     */
     @objc func colorSelected(sender : UIButton){
     canvas.strokeColor  = colorPalette[sender.tag]
-}
+    }
 }
