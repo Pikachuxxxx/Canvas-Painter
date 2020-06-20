@@ -65,6 +65,13 @@ class Canvas: UIView {
     
 }
 
+public enum ButtonTags : Int{
+    case SaveButton = 0
+    case ClearButton
+    case UndoButton
+    case ShareButton
+}
+
 class ViewController: UIViewController {
 
     let canvas = Canvas()
@@ -95,14 +102,14 @@ class ViewController: UIViewController {
         AddLabel(font: UIFont(name: "AvenirNext-DemiBold", size: 36)!, frame: CGRect(x: 0, y: 80, width: 200, height: 36), textColor: UIColor.black, Text: "Welcome!", viewToAdd: self.view)
         AddLabel(font: UIFont(name: "AvenirNext-Regular", size: 16)!, frame: CGRect(x: 25, y: 130, width: 300, height: 50), textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board to start drawing", viewToAdd: self.view)
         // Save button
-        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 100, y: 750, width: 200, height: 40), titleText: "Save Canvas", viewToAdd: self.view, buttonBGColor: nil, autoAdjustFont: false)
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 100, y: 750, width: 200, height: 40), titleText: "Save Canvas", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.SaveButton.rawValue, autoAdjustFont: false)
         // Clear Button
-        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 150, y: 700, width: 100, height: 30), titleText: "Clear", viewToAdd: self.view, buttonBGColor: nil, autoAdjustFont: false)
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 150, y: 700, width: 100, height: 30), titleText: "Clear", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.ClearButton.rawValue, autoAdjustFont: false)
         // Undo Button
-        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 + 50, y: 700, width: 100, height: 30), titleText: "Undo", viewToAdd: self.view, buttonBGColor:  nil, autoAdjustFont: false)
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 + 50, y: 700, width: 100, height: 30), titleText: "Undo", viewToAdd: self.view, buttonBGColor:  nil, buttongTag: ButtonTags.UndoButton.rawValue, autoAdjustFont: false)
         
         // Share Button
-        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 + 40, y: 80, width: 100, height: 40), titleText: "  Share Canvas  ", viewToAdd: self.view, buttonBGColor: nil, autoAdjustFont: true)
+        AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 + 40, y: 80, width: 100, height: 40), titleText: "  Share Canvas  ", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.ShareButton.rawValue, autoAdjustFont: true)
 
         
         // Adding color palatte buttons here
@@ -134,17 +141,8 @@ class ViewController: UIViewController {
         strokeSlider.addTarget(self, action: #selector(ViewController.sliderValueChanged(_:)), for: .valueChanged)
     }
 
-    @objc func colorSelected(sender : UIButton){
-        canvas.strokeColor  = colorPalette[sender.tag]
-    }
-    
-    
-    
-    
-    
-    
+
     //MARK:- Programatic UI
-    
     /**
     Draws a personalized UI label.
 
@@ -167,7 +165,6 @@ class ViewController: UIViewController {
         prgmLabel.lineBreakMode = .byWordWrapping
         viewToAdd.addSubview(prgmLabel)
     }
-    
     /**
     Creates and returns a personalized UI label.
 
@@ -189,7 +186,6 @@ class ViewController: UIViewController {
         prgmLabel.lineBreakMode = .byWordWrapping
         return prgmLabel
     }
-    
     /**
     Draws a personalized UI Button in Neumorphic Style.
 
@@ -202,8 +198,9 @@ class ViewController: UIViewController {
      
     - Returns: (Void) Draws a UIButton in the view specified with the given customisations.
     */
-    func AddButton(titleColor : UIColor, frame : CGRect, titleText : String, viewToAdd : UIView, buttonBGColor : UIColor?, autoAdjustFont : Bool){
+    func AddButton(titleColor : UIColor, frame : CGRect, titleText : String, viewToAdd : UIView, buttonBGColor : UIColor?, buttongTag : Int,autoAdjustFont : Bool){
         let prgrmButton = UIButton()
+        prgrmButton.tag = buttongTag
 //        (red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
         prgrmButton.setTitleColor(titleColor, for: .normal)
         prgrmButton.titleLabel?.adjustsFontSizeToFitWidth = autoAdjustFont
@@ -219,55 +216,93 @@ class ViewController: UIViewController {
         viewToAdd.addSubview(prgrmButton)
         prgrmButton.bringSubviewToFront(prgrmButton.titleLabel! )
     }
-
     // MARK:- Event handling functions
+    /**
+    The event function when any of the button is pressed
+    */
+    @objc func pressed(sender: UIButton!) {
+        print("Button pressed")
+        sender.subviews[0].removeFromSuperview()
+        if(sender.isHighlighted){
+            let innerNueView = UIView()
+            innerNueView.frame = CGRect(x: 0, y: 0, width: sender.frame.width, height: sender.frame.height)
+            innerNueView.layer.cornerRadius = 25
+            innerNueView.addInnerShadow(onSide: .bottomAndRight, shadowColor: UIColor.white, shadowSize: 10, shadowOpacity: 0.7)
+            innerNueView.addInnerShadow(onSide: .topAndLeft, shadowColor: UIColor.black, shadowSize: 10, shadowOpacity: 0.2)
+            innerNueView.isUserInteractionEnabled = false
+            sender.addSubview(innerNueView)
+       sender.setTitle(sender.titleLabel?.text, for: .highlighted)
+        }
         
-        @objc func pressed(sender: UIButton!) {
-            print("Button pressed")
-            sender.subviews[0].removeFromSuperview()
-            if(sender.isHighlighted){
-                let innerNueView = UIView()
-                innerNueView.frame = CGRect(x: 0, y: 0, width: sender.frame.width, height: sender.frame.height)
-                innerNueView.layer.cornerRadius = 25
-                innerNueView.addInnerShadow(onSide: .bottomAndRight, shadowColor: UIColor.white, shadowSize: 10, shadowOpacity: 0.7)
-                innerNueView.addInnerShadow(onSide: .topAndLeft, shadowColor: UIColor.black, shadowSize: 10, shadowOpacity: 0.2)
-                innerNueView.isUserInteractionEnabled = false
-                sender.addSubview(innerNueView)
-           sender.setTitle(sender.titleLabel?.text, for: .highlighted)
+        else if(sender.titleLabel?.text == "Clear"){
+            print("Clearing Canvas....")
+            canvas.clearCanvas()
+            canvas.setNeedsDisplay()
+        }
+        else if(sender.titleLabel?.text == "Undo"){
+            print("Undoing last line in Canvas....")
+            if(canvas.lines.count > 0){
+                canvas.lines.removeLast()
             }
-            if(sender.titleLabel?.text == "Save Canvas"){
-    //            CanvasBoard.saveImage()
+            canvas.setNeedsDisplay()
+        }
+        
+        switch sender.tag {
+        case ButtonTags.SaveButton.rawValue:
+            do {
+                self.CanvasBoard.saveImage()
+                break
             }
-            else if(sender.titleLabel?.text == "Clear"){
-                print("Clearing Canvas....")
-                canvas.clearCanvas()
-                canvas.setNeedsDisplay()
+        case ButtonTags.ClearButton.rawValue:
+            do {
+                self.canvas.clearCanvas()
+                self.canvas.setNeedsDisplay()
+                break
             }
-            else if(sender.titleLabel?.text == "Undo"){
+        case ButtonTags.UndoButton.rawValue:
+            do{
                 print("Undoing last line in Canvas....")
                 if(canvas.lines.count > 0){
                     canvas.lines.removeLast()
                 }
                 canvas.setNeedsDisplay()
+                break
             }
+        case ButtonTags.ShareButton.rawValue:
+            do {
+                // Sharing the canvas logic here
+                break
+            }
+        default:
+            break
         }
-        
-        @objc func released(sender: UIButton!) {
-            print("Button released")
-            print(sender.subviews)
-            sender.subviews[1].removeFromSuperview()
-            let buttonNeuView = NeumorphicVIew(frame: CGRect(x: 0, y: 0, width: sender.frame.width, height: sender.frame.height))
-            buttonNeuView.isUserInteractionEnabled = false
-            sender.addSubview(buttonNeuView)
-            print(sender.subviews)
-            sender.bringSubviewToFront(sender.subviews[0])
+    }
+    /**
+    The event function when any of the button is released
+    */
+    @objc func released(sender: UIButton!) {
+        print("Button released")
+        print(sender.subviews)
+        sender.subviews[1].removeFromSuperview()
+        let buttonNeuView = NeumorphicVIew(frame: CGRect(x: 0, y: 0, width: sender.frame.width, height: sender.frame.height))
+        buttonNeuView.isUserInteractionEnabled = false
+        sender.addSubview(buttonNeuView)
+        print(sender.subviews)
+        sender.bringSubviewToFront(sender.subviews[0])
+        sender.setTitle(sender.titleLabel?.text, for: .highlighted)
+        if(sender.titleLabel?.text == "Save Canvas"){
             sender.setTitle(sender.titleLabel?.text, for: .highlighted)
-            if(sender.titleLabel?.text == "Save Canvas"){
-                sender.setTitle(sender.titleLabel?.text, for: .highlighted)
-            }
         }
-        
-        @objc func sliderValueChanged(_ sender:UISlider){
-            canvas.strokeWidth = sender.value
-        }
+    }/**
+    The event function when the slider is moved
+    */
+    @objc func sliderValueChanged(_ sender:UISlider){
+        canvas.strokeWidth = sender.value
+    }
+    /**
+    The event function when any of the color is pressed
+    */
+    @objc func colorSelected(sender : UIButton){
+    canvas.strokeColor  = colorPalette[sender.tag]
+}
 }
