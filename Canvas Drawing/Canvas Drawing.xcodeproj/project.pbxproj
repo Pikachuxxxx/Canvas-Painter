@@ -13,6 +13,11 @@
 		87062612249D32D70036FD96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87062611249D32D70036FD96 /* Assets.xcassets */; };
 		87062615249D32D70036FD96 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87062613249D32D70036FD96 /* LaunchScreen.storyboard */; };
 		8706261F249D33400036FD96 /* NeumorphicVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8706261E249D33400036FD96 /* NeumorphicVIew.swift */; };
+		87F112E2249F79B200CEBE56 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F112E1249F79B200CEBE56 /* Canvas.swift */; };
+		87F112E4249F7A1200CEBE56 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F112E3249F7A1200CEBE56 /* Line.swift */; };
+		87F112E6249F7A6D00CEBE56 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F112E5249F7A6D00CEBE56 /* UIExtensions.swift */; };
+		87FE11CA249E56FC00D20AEA /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FE11C9249E56FB00D20AEA /* MainTabBarVC.swift */; };
+		87FE11CC249E586200D20AEA /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FE11CB249E586200D20AEA /* FeedVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +29,11 @@
 		87062614249D32D70036FD96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		87062616249D32D70036FD96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8706261E249D33400036FD96 /* NeumorphicVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeumorphicVIew.swift; sourceTree = "<group>"; };
+		87F112E1249F79B200CEBE56 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
+		87F112E3249F7A1200CEBE56 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
+		87F112E5249F7A6D00CEBE56 /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
+		87FE11C9249E56FB00D20AEA /* MainTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarVC.swift; sourceTree = "<group>"; };
+		87FE11CB249E586200D20AEA /* FeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,21 +67,14 @@
 			isa = PBXGroup;
 			children = (
 				8706261D249D32F90036FD96 /* Delegates */,
-				8706260C249D32D50036FD96 /* CanvasDrawVC.swift */,
-				8706261C249D32ED0036FD96 /* Custom Views */,
+				87F112DF249F796C00CEBE56 /* Models */,
+				87FE11C6249E564000D20AEA /* Views */,
+				87F112E0249F798400CEBE56 /* Controllers */,
 				87062611249D32D70036FD96 /* Assets.xcassets */,
 				87062613249D32D70036FD96 /* LaunchScreen.storyboard */,
 				87062616249D32D70036FD96 /* Info.plist */,
 			);
 			path = "Canvas Drawing";
-			sourceTree = "<group>";
-		};
-		8706261C249D32ED0036FD96 /* Custom Views */ = {
-			isa = PBXGroup;
-			children = (
-				8706261E249D33400036FD96 /* NeumorphicVIew.swift */,
-			);
-			path = "Custom Views";
 			sourceTree = "<group>";
 		};
 		8706261D249D32F90036FD96 /* Delegates */ = {
@@ -81,6 +84,34 @@
 				8706260A249D32D50036FD96 /* SceneDelegate.swift */,
 			);
 			path = Delegates;
+			sourceTree = "<group>";
+		};
+		87F112DF249F796C00CEBE56 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				87F112E1249F79B200CEBE56 /* Canvas.swift */,
+				87F112E3249F7A1200CEBE56 /* Line.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		87F112E0249F798400CEBE56 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				8706260C249D32D50036FD96 /* CanvasDrawVC.swift */,
+				87FE11C9249E56FB00D20AEA /* MainTabBarVC.swift */,
+				87FE11CB249E586200D20AEA /* FeedVC.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		87FE11C6249E564000D20AEA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				8706261E249D33400036FD96 /* NeumorphicVIew.swift */,
+				87F112E5249F7A6D00CEBE56 /* UIExtensions.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -153,8 +184,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				87F112E2249F79B200CEBE56 /* Canvas.swift in Sources */,
+				87FE11CC249E586200D20AEA /* FeedVC.swift in Sources */,
 				8706261F249D33400036FD96 /* NeumorphicVIew.swift in Sources */,
+				87F112E6249F7A6D00CEBE56 /* UIExtensions.swift in Sources */,
+				87FE11CA249E56FC00D20AEA /* MainTabBarVC.swift in Sources */,
 				8706260D249D32D50036FD96 /* CanvasDrawVC.swift in Sources */,
+				87F112E4249F7A1200CEBE56 /* Line.swift in Sources */,
 				87062609249D32D50036FD96 /* AppDelegate.swift in Sources */,
 				8706260B249D32D50036FD96 /* SceneDelegate.swift in Sources */,
 			);

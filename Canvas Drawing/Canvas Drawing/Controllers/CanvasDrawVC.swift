@@ -8,59 +8,7 @@
 
 import UIKit
 
-struct Line {
-    let width : CGFloat
-    let color : CGColor
-    var points : [CGPoint]
-}
-class Canvas: UIView {
-    
-    var strokeColor : UIColor = UIColor.black
-    var strokeWidth : Float = 1
 
-    
-    override func draw(_ rect: CGRect) {
-        // Custom Drawing
-        super.draw(rect)
-        
-        guard let context = UIGraphicsGetCurrentContext() else { return }
-        lines.forEach { (line) in
-        for (i, p) in line.points.enumerated() {
-            context.setStrokeColor(line.color)
-            context.setLineWidth(line.width)
-            context.setLineCap(.round)
-            if i == 0 {
-                context.move(to: p)
-            } else {
-                context.addLine(to: p)
-            }
-        }
-         context.strokePath()
-    }
-}
-
-    var lines = [Line]()
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        lines.append(Line.init(width: CGFloat(strokeWidth), color: strokeColor.cgColor, points: []))
-    }
-    
-    // track the finger as we move across screen
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let point = touches.first?.location(in: self) else {return}
-//        print(point)
-        
-        guard var lastLine = lines.popLast() else { return }
-        lastLine.points.append(point)
-        lines.append(lastLine)
-
-        setNeedsDisplay()
-    }
-    public func clearCanvas(){
-        lines.removeAll()
-    }
-    
-}
 
 public enum ButtonTags : Int{
     case SaveButton = 0
@@ -76,17 +24,18 @@ class CanvasDrawVC: UIViewController {
     var CanvasBoard = NeumorphicVIew()
     
     let colorPalette : [UIColor] = [UIColor.black,UIColor.blue,UIColor.white,UIColor.green,UIColor.orange,UIColor.purple,UIColor.red,UIColor.yellow]
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.view.backgroundColor = .offWhite
-        
+        self.tabBarItem.title = "Canvas"
+        tabBarItem.image = UIImage(named: "Canvas Icon")
 
         let viewWidth : CGFloat = self.view.frame.width - 60, viewHeight :  CGFloat = 400
         let neumorphView = NeumorphicVIew(frame: CGRect(x: view.frame.width/2 - viewWidth / 2, y: self.view.frame.height/2 - viewHeight / 2, width: viewWidth, height: viewHeight))
         CanvasBoard = neumorphView
-        // Ading the canvas view to neumorph View
+        // Adding the canvas view to neumorph View
         neumorphView.addSubview(canvas)
         view.addSubview(neumorphView)
         
@@ -97,7 +46,7 @@ class CanvasDrawVC: UIViewController {
 
         // Welcome Text
         AddLabel(font: UIFont(name: "AvenirNext-DemiBold", size: 36)!, frame: CGRect(x: 0, y: 80, width: 200, height: 36), textColor: UIColor.black, Text: "Welcome!", viewToAdd: self.view)
-        AddLabel(font: UIFont(name: "AvenirNext-Regular", size: 16)!, frame: CGRect(x: 25, y: 130, width: 300, height: 50), textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board to start drawing", viewToAdd: self.view)
+        AddLabel(font: UIFont(name: "AvenirNext-Regular", size: 16)!, frame: CGRect(x: 25, y: 130, width: 300, height: 50), textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board and start drawing", viewToAdd: self.view)
         // Save button
         AddButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), frame: CGRect(x: self.view.frame.width / 2 - 100, y: 750, width: 200, height: 40), titleText: "Save Canvas", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.SaveButton.rawValue, autoAdjustFont: false)
         // Clear Button
@@ -132,7 +81,7 @@ class CanvasDrawVC: UIViewController {
         strokeSlider.frame = CGRect(x: 30 , y: 660 , width: 300, height: 30)
         self.view.addSubview(strokeSlider)
         
-        //Let's customise the 'track' and 'thumb' of the slider to neumorphic view
+        //Let's customise the `track` and `thumb` of the slider to neumorphic view
         
         //Stroke Slider Events
         strokeSlider.addTarget(self, action: #selector(CanvasDrawVC.sliderValueChanged(_:)), for: .valueChanged)
@@ -141,7 +90,7 @@ class CanvasDrawVC: UIViewController {
 
     //MARK:- Programatic UI
     /**
-    Draws a personalized UI label.
+        Draws a personalized UI label.
 
     - Parameter font: The font of the text in a UIFont object.
     - Parameter frame : The dimensions of the UILabel in a CGRect object.
@@ -163,7 +112,7 @@ class CanvasDrawVC: UIViewController {
         viewToAdd.addSubview(prgmLabel)
     }
     /**
-    Creates and returns a personalized UI label.
+        Creates and returns a personalized UI label.
 
     - Parameter font: The font of the text in a UIFont object.
     - Parameter frame : The dimensions of the UILabel in a CGRect object.
@@ -184,7 +133,7 @@ class CanvasDrawVC: UIViewController {
         return prgmLabel
     }
     /**
-    Draws a personalized UI Button in Neumorphic Style.
+        Draws a personalized UI Button in Neumorphic Style.
 
     - Parameter titleColor: The colour of the text.
     - Parameter frame : The dimensions of the button.
@@ -215,7 +164,7 @@ class CanvasDrawVC: UIViewController {
     }
     // MARK:- Event handling functions
     /**
-     The event function when any of the button is pressed
+        The event function when any of the button is pressed
     */
     @objc func pressed(sender: UIButton!) {
         print("Button pressed")
@@ -231,18 +180,6 @@ class CanvasDrawVC: UIViewController {
        sender.setTitle(sender.titleLabel?.text, for: .highlighted)
         }
         
-        else if(sender.titleLabel?.text == "Clear"){
-            print("Clearing Canvas....")
-            canvas.clearCanvas()
-            canvas.setNeedsDisplay()
-        }
-        else if(sender.titleLabel?.text == "Undo"){
-            print("Undoing last line in Canvas....")
-            if(canvas.lines.count > 0){
-                canvas.lines.removeLast()
-            }
-            canvas.setNeedsDisplay()
-        }
         // MARK:- Sender based handling
         switch sender.tag {
         case ButtonTags.SaveButton.rawValue:
@@ -275,7 +212,7 @@ class CanvasDrawVC: UIViewController {
         }
     }
     /**
-     The event function when any of the button is released
+        The event function when any of the button is released
     */
     @objc func released(sender: UIButton!) {
         print("Button released")
@@ -292,13 +229,13 @@ class CanvasDrawVC: UIViewController {
         }
     }
     /**
-     The event function when the slider is moved
+        The event function when the slider is moved
     */
     @objc func sliderValueChanged(_ sender:UISlider){
         canvas.strokeWidth = sender.value
     }
     /**
-     The event function when any of the color is pressed
+        The event function when any of the color is pressed
     */
     @objc func colorSelected(sender : UIButton){
     canvas.strokeColor  = colorPalette[sender.tag]
