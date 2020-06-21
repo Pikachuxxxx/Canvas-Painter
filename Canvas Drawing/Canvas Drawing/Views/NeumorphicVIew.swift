@@ -19,7 +19,7 @@ class NeumorphicVIew: UIView {
 //      (red: 0.8823529412, green: 0.8823529412, blue: 0.9215686275, alpha: 1)
         let cornerRadius: CGFloat = 25
         let shadowRadius: CGFloat = 7
-
+        self.layer.cornerRadius = cornerRadius
         let darkShadow = CALayer()
         darkShadow.frame = bounds
         darkShadow.backgroundColor = backgroundColor?.cgColor

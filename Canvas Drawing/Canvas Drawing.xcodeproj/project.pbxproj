@@ -16,6 +16,7 @@
 		87F112E2249F79B200CEBE56 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F112E1249F79B200CEBE56 /* Canvas.swift */; };
 		87F112E4249F7A1200CEBE56 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F112E3249F7A1200CEBE56 /* Line.swift */; };
 		87F112E6249F7A6D00CEBE56 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F112E5249F7A6D00CEBE56 /* UIExtensions.swift */; };
+		87F112E8249FA7A900CEBE56 /* UICreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F112E7249FA7A900CEBE56 /* UICreator.swift */; };
 		87FE11CA249E56FC00D20AEA /* MainTabBarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FE11C9249E56FB00D20AEA /* MainTabBarVC.swift */; };
 		87FE11CC249E586200D20AEA /* FeedVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87FE11CB249E586200D20AEA /* FeedVC.swift */; };
 /* End PBXBuildFile section */
@@ -32,6 +33,7 @@
 		87F112E1249F79B200CEBE56 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		87F112E3249F7A1200CEBE56 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		87F112E5249F7A6D00CEBE56 /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
+		87F112E7249FA7A900CEBE56 /* UICreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICreator.swift; sourceTree = "<group>"; };
 		87FE11C9249E56FB00D20AEA /* MainTabBarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarVC.swift; sourceTree = "<group>"; };
 		87FE11CB249E586200D20AEA /* FeedVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -110,6 +112,7 @@
 			children = (
 				8706261E249D33400036FD96 /* NeumorphicVIew.swift */,
 				87F112E5249F7A6D00CEBE56 /* UIExtensions.swift */,
+				87F112E7249FA7A900CEBE56 /* UICreator.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 				8706260D249D32D50036FD96 /* CanvasDrawVC.swift in Sources */,
 				87F112E4249F7A1200CEBE56 /* Line.swift in Sources */,
 				87062609249D32D50036FD96 /* AppDelegate.swift in Sources */,
+				87F112E8249FA7A900CEBE56 /* UICreator.swift in Sources */,
 				8706260B249D32D50036FD96 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

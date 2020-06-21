@@ -9,10 +9,12 @@
 import Foundation
 import UIKit
 
+// MARK:- UIColor Extensions
 extension UIColor{
+    // A Slight greyishshade of white for the creation of Neumoprphic effect
     static let offWhite = UIColor(red: 225 / 255, green: 225 / 255, blue: 235 / 255, alpha: 255 / 255)
 }
-
+// MARK:- UIImage Extensions
 extension UIImage {
     /**
             To save an UIImage to photo library.
@@ -48,8 +50,11 @@ extension UIImage {
         return image
     }
 }
-
+// MARK:- UIAlertController Extensions
 extension UIAlertController {
+    /**
+        A method to present the UIAlert Controller in the current root view.
+     */
     func present() {
         guard let controller = UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.rootViewController else {
             return
@@ -57,6 +62,7 @@ extension UIAlertController {
         controller.present(self, animated: true)
     }
 }
+// MARK:- UIView Extensions
 extension UIView{
     /**
             Converts the specified View on which this method was called into an UIImage with the same dimensions as the View.
@@ -72,7 +78,7 @@ extension UIView{
         return image
     }
     /**
-            Creates the mask of  the given View (UIView) with the speicified CGRect bounds, or a inverse mask if specified.
+        Creates the mask of  the given View (UIView) with the speicified CGRect bounds, or a inverse mask if specified.
      
       - Parameter withRect : The rectangle bounds of the View that we desire to mask.
       - Parameter inverse : Defaults to false, if true creates a inverse mask of the VIew.
@@ -90,11 +96,12 @@ extension UIView{
 
         self.layer.mask = maskLayer
     }
-    
     // Different inner shadow style options
        public enum innerShadowSide
        {
-           case all, left, right, top, bottom, topAndLeft, topAndRight, bottomAndLeft, bottomAndRight, exceptLeft, exceptRight, exceptTop, exceptBottom
+           case all, left, right, top, bottom,
+        topAndLeft, topAndRight, bottomAndLeft, bottomAndRight,
+        exceptLeft, exceptRight, exceptTop, exceptBottom
        }
        
        /**
@@ -108,6 +115,7 @@ extension UIView{
        */
        public func addInnerShadow(onSide: innerShadowSide, shadowColor: UIColor, shadowSize: CGFloat, cornerRadius: CGFloat = 0.0, shadowOpacity: Float)
        {
+           self.layer.cornerRadius = cornerRadius
            // define and set a shaow layer
            let shadowLayer = CAShapeLayer()
            shadowLayer.frame = bounds
