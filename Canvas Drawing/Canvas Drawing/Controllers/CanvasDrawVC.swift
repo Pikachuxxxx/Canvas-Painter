@@ -18,10 +18,13 @@ public enum ButtonTags : Int{
 class CanvasDrawVC: UIViewController {
 
     let canvas = Canvas()
-    var CanvasBoard = NeumorphicVIew() // Getter kinda property Class Object for the Neumorphic View.
-    
+    var CanvasBoard = NeumorphicVIew() // Getter kinda property Class Object for the Neumorphic Canvas Board for main drawing.
+    // Neumorphic Canvas Board
+    let neumorphCanvasBoard = NeumorphicVIew(frame: .zero)
+
     
     var shareBtn : UIButton! = nil
+    
     // The canvas colour palette colours
     let colorPalette : [UIColor] = [UIColor.black,UIColor.cyan,UIColor.green,UIColor.orange,UIColor.purple,UIColor.red,UIColor.yellow,UIColor.white]
 
@@ -36,31 +39,28 @@ class CanvasDrawVC: UIViewController {
         self.tabBarItem.title = "Canvas"
         tabBarItem.image = UIImage(named: "Canvas Icon")
         
-        // Neumorphic Canvas Board
-        let viewWidth : CGFloat = self.view.frame.width - 60, viewHeight :  CGFloat = 400
-        let neumorphView = NeumorphicVIew(frame: CGRect(x: view.frame.width/2 - viewWidth / 2, y: self.view.frame.height/2 - viewHeight / 2, width: viewWidth, height: viewHeight))
-        
+
+        neumorphCanvasBoard.translatesAutoresizingMaskIntoConstraints = false
         // TODO : Refactor Neumorphic view to a global property with public get adn private set.
-        
         // A gloabl instance of Neumprphic Cavas board to get it's configuration basiacally acting as a getter property
-        CanvasBoard = neumorphView
+        CanvasBoard = neumorphCanvasBoard
         // Setting up canvas board settings
-        canvas.backgroundColor = neumorphView.backgroundColor
-        canvas.layer.cornerRadius = neumorphView.layer.cornerRadius
-        canvas.frame = CGRect(x: 0, y: 0, width: viewWidth, height: viewHeight)
+        canvas.translatesAutoresizingMaskIntoConstraints = false
+        canvas.backgroundColor = neumorphCanvasBoard.backgroundColor
         // Adding the canvas view to neumorph View
-        neumorphView.addSubview(canvas)
+        neumorphCanvasBoard.addSubview(canvas)
         // Adding the neumorphhic view to the main View
-        view.addSubview(neumorphView)
+        view.addSubview(neumorphCanvasBoard)
 
     // MARK:- View UI Objects
 
         // Welcome Text
         let welcomeLabel = GetLabel(font: UIFont(name: "AvenirNext-DemiBold", size: 36)!, textColor: UIColor.black, Text: "Welcome!", viewToAdd: self.view)
-//        AddLabel(font: UIFont(name: "AvenirNext-Regular", size: 16)!, textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board and start drawing", viewToAdd: self.view)
+        // Description Text
+        let welcomeDescriptionLabel = GetLabel(font: UIFont(name: "AvenirNext-Regular", size: 16)!, textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board and start drawing!", viewToAdd: self.view)
         
         // Share Button
-        shareBtn = GetButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), titleText: "   Share Canvas   ", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.ShareButton.rawValue, autoAdjustFont: true)
+        shareBtn = GetButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), titleText: "Share Canvas", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.ShareButton.rawValue, autoAdjustFont: true)
         print("The subviews are : \(shareBtn.subviews)")
 
         
@@ -72,7 +72,6 @@ class CanvasDrawVC: UIViewController {
             circlePalette.showsTouchWhenHighlighted = true
             circlePalette.backgroundColor = color
             circlePalette.addTarget(self, action: #selector(CanvasDrawVC.colorSelected(sender:)), for: [.touchDown])
-            circlePalette.frame = CGRect(x: 30 + (40*index), y: 620 , width: 30, height: 30)
             self.view.addSubview(circlePalette)
             circlePalette.tag = index
         }
@@ -97,18 +96,46 @@ class CanvasDrawVC: UIViewController {
         // Weclome Text Constraints
         welcomeLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 80).isActive = true
         welcomeLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+        welcomeLabel.widthAnchor.constraint(equalToConstant: 180).isActive = true
+        welcomeLabel.setNeedsLayout()
+        welcomeLabel.layoutIfNeeded()
+        
+        // Description Text Constraints
+        welcomeDescriptionLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 0).isActive = true
+        welcomeDescriptionLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+        welcomeDescriptionLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+        welcomeDescriptionLabel.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        welcomeDescriptionLabel.setNeedsLayout()
+        welcomeDescriptionLabel.layoutIfNeeded()
         
         // Share Button Constraints
+        shareBtn.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 90).isActive = true
         shareBtn.leadingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor, constant: 40).isActive = true
         shareBtn.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-//        shareBtn.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 80).isActive = true
-        shareBtn.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+        shareBtn.setNeedsLayout()
+        shareBtn.layoutIfNeeded()
+        
+        // Neumorph Canvas Board Constraints
+        neumorphCanvasBoard.topAnchor.constraint(equalTo: welcomeDescriptionLabel.bottomAnchor, constant: 10).isActive = true
+        neumorphCanvasBoard.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+        neumorphCanvasBoard.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+        neumorphCanvasBoard.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        neumorphCanvasBoard.setNeedsLayout()
+        neumorphCanvasBoard.layoutIfNeeded()
+        self.view.bringSubviewToFront(neumorphCanvasBoard)
+        neumorphCanvasBoard.backgroundColor = UIColor.red
+        neumorphCanvasBoard.UpdateCustomisations()
+
     }
-    
+    //MARK:- Did Finish Laying out SubViews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
         released(sender: shareBtn)
         print("The subviews after first release : \(shareBtn.subviews)")
+        
+        canvas.layer.cornerRadius = neumorphCanvasBoard.layer.cornerRadius
+        canvas.frame = CGRect(x: 0, y: 0, width: neumorphCanvasBoard.frame.width, height: neumorphCanvasBoard.frame.height)
     }
     //MARK:- Programatic UI Pre-Setup
     /**
@@ -153,6 +180,7 @@ class CanvasDrawVC: UIViewController {
         prgmLabel.text = Text
         prgmLabel.numberOfLines = 0
         prgmLabel.lineBreakMode = .byWordWrapping
+        prgmLabel.adjustsFontSizeToFitWidth = true
         viewToAdd.addSubview(prgmLabel)
         // Auto layout configurations
         prgmLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -180,6 +208,7 @@ class CanvasDrawVC: UIViewController {
         prgrmButton.titleLabel?.adjustsFontSizeToFitWidth = autoAdjustFont
         prgrmButton.titleLabel?.numberOfLines = 1
         prgrmButton.titleLabel?.minimumScaleFactor = 0.6
+        prgrmButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         prgrmButton.addTarget(self, action: #selector(CanvasDrawVC.pressed(sender:)), for: [.touchDown])
         prgrmButton.addTarget(self, action: #selector(CanvasDrawVC.released(sender:)), for: [.touchUpInside])
         prgrmButton.setTitle(titleText, for: .normal)
@@ -196,43 +225,44 @@ class CanvasDrawVC: UIViewController {
         
         prgrmButton.bringSubviewToFront(prgrmButton.titleLabel! )
     }
-       /**
-            Draws a personalized UI Button in Neumorphic Style.
+   /**
+        Draws a personalized UI Button in Neumorphic Style.
 
-        - Parameter titleColor: The colour of the text.
-        - Parameter frame : The dimensions of the button.
-        - Parameter titleText : The text to display on the button.
-        - Parameter viewToAdd : The view to which the UIButton should be added.
-        - Parameter buttonBGColor : Set the background color of the button, nil defaults to view bg color.
-        - Parameter autoAdjustFont : To either adjust the UIButton text dynamically or not.
-        - Parameter viewToAdd : The view in which the button should be added to.
+    - Parameter titleColor: The colour of the text.
+    - Parameter frame : The dimensions of the button.
+    - Parameter titleText : The text to display on the button.
+    - Parameter viewToAdd : The view to which the UIButton should be added.
+    - Parameter buttonBGColor : Set the background color of the button, nil defaults to view bg color.
+    - Parameter autoAdjustFont : To either adjust the UIButton text dynamically or not.
+    - Parameter viewToAdd : The view in which the button should be added to.
 
-        - Returns: UIButton with custom configurations and adds it to the specified View.
-        */
-        func GetButton(titleColor : UIColor, titleText : String, viewToAdd : UIView, buttonBGColor : UIColor?, buttongTag : Int,autoAdjustFont : Bool) -> UIButton{
-            let prgrmButton = UIButton()
-            prgrmButton.tag = buttongTag
-    //        (red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
-            prgrmButton.setTitleColor(titleColor, for: .normal)
-            prgrmButton.titleLabel?.adjustsFontSizeToFitWidth = autoAdjustFont
-            prgrmButton.titleLabel?.numberOfLines = 1
-            prgrmButton.titleLabel?.minimumScaleFactor = 0.6
-            prgrmButton.addTarget(self, action: #selector(CanvasDrawVC.pressed(sender:)), for: [.touchDown])
-            prgrmButton.addTarget(self, action: #selector(CanvasDrawVC.released(sender:)), for: [.touchUpInside])
-            prgrmButton.setTitle(titleText, for: .normal)
-            viewToAdd.addSubview(prgrmButton)
-            prgrmButton.bringSubviewToFront(prgrmButton.titleLabel! )
-            // Auto layout configurations
-            prgrmButton.translatesAutoresizingMaskIntoConstraints = false
-            
-            //Neumoprphic Effect
-            let buttonNeuView = NeumorphicVIew(frame: CGRect(x: 0, y: 0, width: prgrmButton.frame.width, height: prgrmButton.frame.height))
-            buttonNeuView.isUserInteractionEnabled = false
-            prgrmButton.addSubview(buttonNeuView)
-            
-            prgrmButton.bringSubviewToFront(prgrmButton.titleLabel! )
-            return prgrmButton
-        }
+    - Returns: UIButton with custom configurations and adds it to the specified View.
+    */
+    func GetButton(titleColor : UIColor, titleText : String, viewToAdd : UIView, buttonBGColor : UIColor?, buttongTag : Int,autoAdjustFont : Bool) -> UIButton{
+        let prgrmButton = UIButton()
+        prgrmButton.tag = buttongTag
+//        (red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1)
+        prgrmButton.setTitleColor(titleColor, for: .normal)
+        prgrmButton.titleLabel?.adjustsFontSizeToFitWidth = autoAdjustFont
+        prgrmButton.titleLabel?.numberOfLines = 1
+        prgrmButton.titleLabel?.minimumScaleFactor = 0.6
+        prgrmButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        prgrmButton.addTarget(self, action: #selector(CanvasDrawVC.pressed(sender:)), for: [.touchDown])
+        prgrmButton.addTarget(self, action: #selector(CanvasDrawVC.released(sender:)), for: [.touchUpInside])
+        prgrmButton.setTitle(titleText, for: .normal)
+        viewToAdd.addSubview(prgrmButton)
+        prgrmButton.bringSubviewToFront(prgrmButton.titleLabel! )
+        // Auto layout configurations
+        prgrmButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        //Neumoprphic Effect
+        let buttonNeuView = NeumorphicVIew(frame: CGRect(x: 0, y: 0, width: prgrmButton.frame.width, height: prgrmButton.frame.height))
+        buttonNeuView.isUserInteractionEnabled = false
+        prgrmButton.addSubview(buttonNeuView)
+        
+        prgrmButton.bringSubviewToFront(prgrmButton.titleLabel! )
+        return prgrmButton
+    }
     // MARK:- Event handling functions
     /**
         The event handling function when any of the button is pressed.

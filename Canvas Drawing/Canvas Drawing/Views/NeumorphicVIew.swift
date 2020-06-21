@@ -13,10 +13,17 @@ class NeumorphicVIew: UIView {
 
     override init(frame: CGRect) {
         super.init(frame:frame)
-
+        UpdateCustomisations()
+    }
+    
+    required init?(coder aDecoder : NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    func UpdateCustomisations(){
         self.layer.masksToBounds = false
         self.layer.backgroundColor = UIColor.offWhite.cgColor
-//      (red: 0.8823529412, green: 0.8823529412, blue: 0.9215686275, alpha: 1)
+    //      (red: 0.8823529412, green: 0.8823529412, blue: 0.9215686275, alpha: 1)
         let cornerRadius: CGFloat = 25
         let shadowRadius: CGFloat = 7
         self.layer.cornerRadius = cornerRadius
@@ -39,13 +46,7 @@ class NeumorphicVIew: UIView {
         lightShadow.shadowOpacity = 0.9
         lightShadow.shadowRadius = shadowRadius
         self.layer.insertSublayer(lightShadow, at: 0)
-
     }
-    
-    required init?(coder aDecoder : NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
     func saveImage() {
         let selector = #selector(self.onImageSaved(_:error:contextInfo:))
         takeSnapshot()?.saveToPhotoLibrary(self, selector)

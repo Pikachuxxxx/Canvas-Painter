@@ -115,7 +115,6 @@ extension UIView{
        */
        public func addInnerShadow(onSide: innerShadowSide, shadowColor: UIColor, shadowSize: CGFloat, cornerRadius: CGFloat = 0.0, shadowOpacity: Float)
        {
-           self.layer.cornerRadius = cornerRadius
            // define and set a shaow layer
            let shadowLayer = CAShapeLayer()
            shadowLayer.frame = bounds
