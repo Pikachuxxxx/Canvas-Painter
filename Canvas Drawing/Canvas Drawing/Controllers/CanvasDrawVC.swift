@@ -182,7 +182,7 @@ class CanvasDrawVC: UIViewController {
         clearUndoStack.addArrangedSubview(undoBtn)
         clearUndoStack.axis = .horizontal
         clearUndoStack.distribution = .fillEqually
-        clearUndoStack.spacing = 60
+        clearUndoStack.spacing = 80
         // Constraints for clear undo stack
         clearUndoStack.topAnchor.constraint(equalTo: strokeSlider.bottomAnchor, constant: 20).isActive = true
         clearUndoStack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
@@ -359,7 +359,7 @@ class CanvasDrawVC: UIViewController {
         if(sender.isHighlighted){
             let innerNueView = UIView()
             innerNueView.frame = CGRect(x: 0, y: 0, width: sender.frame.width, height: sender.frame.height)
-            innerNueView.layer.cornerRadius = 25
+            innerNueView.layer.cornerRadius = 15
             innerNueView.addInnerShadow(onSide: .bottomAndRight, shadowColor: UIColor.white, shadowSize: 10, shadowOpacity: 0.7)
             innerNueView.addInnerShadow(onSide: .topAndLeft, shadowColor: UIColor.black, shadowSize: 10, shadowOpacity: 0.2)
             innerNueView.isUserInteractionEnabled = false
