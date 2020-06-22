@@ -22,12 +22,21 @@ class CanvasDrawVC: UIViewController {
     // Neumorphic Canvas Board
     let neumorphCanvasBoard = NeumorphicVIew(frame: .zero)
 
-    
     var shareBtn : UIButton! = nil
+    var clearBtn : UIButton! = nil
+    var undoBtn : UIButton! = nil
+    var saveBtn : UIButton! = nil
+    let strokeSlider = UISlider()
+    
     
     // The canvas colour palette colours
     let colorPalette : [UIColor] = [UIColor.black,UIColor.cyan,UIColor.green,UIColor.orange,UIColor.purple,UIColor.red,UIColor.yellow,UIColor.white]
 
+    let paletteStack = UIStackView()
+    let welcomeStack = UIStackView()
+    let clearUndoStack = UIStackView()
+    
+    //MARK:- View Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -41,7 +50,7 @@ class CanvasDrawVC: UIViewController {
         
 
         neumorphCanvasBoard.translatesAutoresizingMaskIntoConstraints = false
-        // TODO : Refactor Neumorphic view to a global property with public get adn private set.
+    // TODO: Refactor Neumorphic view to a global property with public get and private set.
         // A gloabl instance of Neumprphic Cavas board to get it's configuration basiacally acting as a getter property
         CanvasBoard = neumorphCanvasBoard
         // Setting up canvas board settings
@@ -55,35 +64,45 @@ class CanvasDrawVC: UIViewController {
     // MARK:- View UI Objects
 
         // Welcome Text
-        let welcomeLabel = GetLabel(font: UIFont(name: "AvenirNext-DemiBold", size: 36)!, textColor: UIColor.black, Text: "Welcome!", viewToAdd: self.view)
+        let welcomeLabel = GetLabel(font: UIFont(name: "AvenirNext-DemiBold", size: 32)!, textColor: UIColor.black, Text: "Welcome!", viewToAdd: self.view)
         // Description Text
-        let welcomeDescriptionLabel = GetLabel(font: UIFont(name: "AvenirNext-Regular", size: 16)!, textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board and start drawing!", viewToAdd: self.view)
+        let welcomeDescriptionLabel = GetLabel(font: UIFont(name: "AvenirNext-Regular", size: 14)!, textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board and start drawing!", viewToAdd: self.view)
         
         // Share Button
         shareBtn = GetButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), titleText: "Share Canvas", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.ShareButton.rawValue, autoAdjustFont: true)
-        print("The subviews are : \(shareBtn.subviews)")
-
+        // Clear Button
+        clearBtn = GetButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), titleText: "Clear", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.ClearButton.rawValue, autoAdjustFont: true)
+        // Undo Button
+        undoBtn = GetButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), titleText: "Undo", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.UndoButton.rawValue, autoAdjustFont: true)
+        // Save Button
+        saveBtn = GetButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), titleText: "Save Canvas", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.SaveButton.rawValue, autoAdjustFont: true)
         
         // Adding color palatte buttons here
-    // TODO : Embed the palette buttons in a Stack View
+    // TODO: Embed the palette buttons in a Stack View
         for (index,color) in colorPalette.enumerated(){
-            let circlePalette = UIButton(type: .custom)
-            circlePalette.layer.cornerRadius = 15
+            let circlePalette = UIButton(type: .system)
             circlePalette.showsTouchWhenHighlighted = true
+            circlePalette.layer.cornerRadius = 15
             circlePalette.backgroundColor = color
             circlePalette.addTarget(self, action: #selector(CanvasDrawVC.colorSelected(sender:)), for: [.touchDown])
-            self.view.addSubview(circlePalette)
+//            circlePalette.subviews[0].removeFromSuperview()
+            paletteStack.addArrangedSubview(circlePalette)
             circlePalette.tag = index
         }
+        self.view.addSubview(paletteStack)
+        // Palette Stack View configurations here
+        paletteStack.translatesAutoresizingMaskIntoConstraints = false
+        paletteStack.spacing = 15
+        paletteStack.distribution = .fillEqually
+        
         
     // Slider (Neumorphic style)
-        // TODO : Make a customisable standalone function
-        let strokeSlider = UISlider()
+        // TODO: Make a customisable standalone function
         strokeSlider.minimumValue = 1
         strokeSlider.maximumValue = 10
         strokeSlider.isContinuous = true
         strokeSlider.tintColor = UIColor.black
-        strokeSlider.frame = CGRect(x: 30 , y: 660 , width: 300, height: 30)
+        strokeSlider.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(strokeSlider)
         
         //Let's customise the `track` and `thumb` of the slider to neumorphic view
@@ -93,49 +112,108 @@ class CanvasDrawVC: UIViewController {
         
     // MARK:-  View UI Objects Constraints
         
-        // Weclome Text Constraints
-        welcomeLabel.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 80).isActive = true
-        welcomeLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
-        welcomeLabel.widthAnchor.constraint(equalToConstant: 180).isActive = true
-        welcomeLabel.setNeedsLayout()
-        welcomeLabel.layoutIfNeeded()
-        
+        welcomeStack.addArrangedSubview(welcomeLabel)
+        welcomeStack.addArrangedSubview(shareBtn)
+        welcomeStack.translatesAutoresizingMaskIntoConstraints = false
+        welcomeStack.spacing = 40
+        paletteStack.distribution = .fillProportionally
+        self.view.addSubview(welcomeStack)
+        welcomeStack.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        welcomeStack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+        welcomeStack.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+        welcomeStack.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        welcomeStack.layoutIfNeeded()
+        welcomeStack.setNeedsLayout()
+
         // Description Text Constraints
-        welcomeDescriptionLabel.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 0).isActive = true
+        welcomeDescriptionLabel.topAnchor.constraint(equalTo: welcomeStack.bottomAnchor, constant: 8).isActive = true
         welcomeDescriptionLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
         welcomeDescriptionLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-        welcomeDescriptionLabel.heightAnchor.constraint(equalToConstant: 60).isActive = true
+//        welcomeDescriptionLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         welcomeDescriptionLabel.setNeedsLayout()
         welcomeDescriptionLabel.layoutIfNeeded()
         
-        // Share Button Constraints
-        shareBtn.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 90).isActive = true
-        shareBtn.leadingAnchor.constraint(equalTo: welcomeLabel.trailingAnchor, constant: 40).isActive = true
-        shareBtn.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-        shareBtn.setNeedsLayout()
-        shareBtn.layoutIfNeeded()
+        
         
         // Neumorph Canvas Board Constraints
         neumorphCanvasBoard.topAnchor.constraint(equalTo: welcomeDescriptionLabel.bottomAnchor, constant: 10).isActive = true
         neumorphCanvasBoard.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
         neumorphCanvasBoard.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-        neumorphCanvasBoard.heightAnchor.constraint(equalToConstant: 300).isActive = true
-        neumorphCanvasBoard.setNeedsLayout()
-        neumorphCanvasBoard.layoutIfNeeded()
-        self.view.bringSubviewToFront(neumorphCanvasBoard)
-        neumorphCanvasBoard.backgroundColor = UIColor.red
-        neumorphCanvasBoard.UpdateCustomisations()
+        neumorphCanvasBoard.heightAnchor.constraint(greaterThanOrEqualToConstant: 280).isActive = true
+        neumorphCanvasBoard.heightAnchor.constraint(lessThanOrEqualToConstant: 350).isActive = true
+//        neumorphCanvasBoard.heightAnchor.constraint(equalToConstant: 280).isActive = true
+        canvas.backgroundColor = UIColor.clear
+        
+        canvas.topAnchor.constraint(equalTo: neumorphCanvasBoard.topAnchor).isActive = true
+        canvas.leadingAnchor.constraint(equalTo: neumorphCanvasBoard.leadingAnchor).isActive = true
+        canvas.trailingAnchor.constraint(equalTo: neumorphCanvasBoard.trailingAnchor).isActive = true
+        canvas.bottomAnchor.constraint(equalTo: neumorphCanvasBoard.bottomAnchor).isActive = true
+        
 
+        // Palette Stack Constraints
+        paletteStack.topAnchor.constraint(equalTo: neumorphCanvasBoard.bottomAnchor, constant: 20).isActive = true
+        paletteStack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+        paletteStack.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+        paletteStack.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        paletteStack.setNeedsLayout()
+        paletteStack.layoutIfNeeded()
+        
+        // Slider Constraints
+        strokeSlider.topAnchor.constraint(equalTo: paletteStack.bottomAnchor, constant: 20).isActive = true
+        strokeSlider.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+        strokeSlider.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+//        strokeSlider.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        strokeSlider.setNeedsLayout()
+        strokeSlider.layoutIfNeeded()
+        
+        // Clear and Undo Stack
+        self.view.addSubview(clearUndoStack)
+        clearUndoStack.translatesAutoresizingMaskIntoConstraints = false
+        clearUndoStack.addArrangedSubview(clearBtn)
+        clearUndoStack.addArrangedSubview(undoBtn)
+        clearUndoStack.axis = .horizontal
+        clearUndoStack.distribution = .fillEqually
+        clearUndoStack.spacing = 60
+        // Constraints for clear undo stack
+        clearUndoStack.topAnchor.constraint(equalTo: strokeSlider.bottomAnchor, constant: 20).isActive = true
+        clearUndoStack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+        clearUndoStack.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+        clearUndoStack.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        clearUndoStack.setNeedsLayout()
+        clearUndoStack.layoutIfNeeded()
+        
+        // Save Button Constraints
+        saveBtn.translatesAutoresizingMaskIntoConstraints = false
+        saveBtn.topAnchor.constraint(equalTo: clearUndoStack.bottomAnchor, constant: 20).isActive = true
+        saveBtn.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 80).isActive = true
+        saveBtn.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -80).isActive = true
+        saveBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
+//        saveBtn.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        saveBtn.setNeedsLayout()
+        saveBtn.layoutIfNeeded()
+        
+               
     }
+    
+    
+    
     //MARK:- Did Finish Laying out SubViews
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
         released(sender: shareBtn)
-        print("The subviews after first release : \(shareBtn.subviews)")
-        
+        released(sender: clearBtn)
+        released(sender: undoBtn)
+        released(sender: saveBtn)
         canvas.layer.cornerRadius = neumorphCanvasBoard.layer.cornerRadius
         canvas.frame = CGRect(x: 0, y: 0, width: neumorphCanvasBoard.frame.width, height: neumorphCanvasBoard.frame.height)
+        canvas.setNeedsLayout()
+        canvas.layoutIfNeeded()
+        neumorphCanvasBoard.setNeedsLayout()
+        neumorphCanvasBoard.layoutIfNeeded()
+        neumorphCanvasBoard.UpdateCustomisations()
+        self.view.bringSubviewToFront(neumorphCanvasBoard)
+
     }
     //MARK:- Programatic UI Pre-Setup
     /**
@@ -313,7 +391,6 @@ class CanvasDrawVC: UIViewController {
         default:
             break
         }
-        print("The subviews after pressing : \(sender.subviews)")
     }
     /**
         The event function when any of the button is released.
@@ -325,7 +402,6 @@ class CanvasDrawVC: UIViewController {
         sender.addSubview(buttonNeuView)
         sender.bringSubviewToFront(sender.titleLabel! )
         sender.setTitle(sender.titleLabel?.text, for: .highlighted)
-        print("The subviews after releasing : \(sender.subviews)")
     }
     /**
         The event function when the slider is moved.
