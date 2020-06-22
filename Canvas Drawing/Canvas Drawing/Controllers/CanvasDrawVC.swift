@@ -68,9 +68,10 @@ class CanvasDrawVC: UIViewController {
         welcomeLabel.minimumScaleFactor = 0.6
         welcomeLabel.numberOfLines = 1
         welcomeLabel.adjustsFontSizeToFitWidth = true
+        welcomeLabel.textAlignment = .center
         // Description Text
         let welcomeDescriptionLabel = GetLabel(font: UIFont(name: "AvenirNext-Regular", size: 14)!, textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board and start drawing!", viewToAdd: self.view)
-        welcomeDescriptionLabel.minimumScaleFactor = 0.6
+        welcomeDescriptionLabel.minimumScaleFactor = 0.4
         welcomeDescriptionLabel.numberOfLines = 2
         welcomeDescriptionLabel.adjustsFontSizeToFitWidth = true
         
@@ -90,19 +91,18 @@ class CanvasDrawVC: UIViewController {
         // Adding color palatte buttons here
     // TODO: Embed the palette buttons in a Stack View
         for (index,color) in colorPalette.enumerated(){
-            let circlePalette = UIButton(type: .system)
+            let circlePalette = UIButton(type: .roundedRect)
             circlePalette.showsTouchWhenHighlighted = true
-            circlePalette.layer.cornerRadius = 15
+            circlePalette.layer.cornerRadius = 8
             circlePalette.backgroundColor = color
             circlePalette.addTarget(self, action: #selector(CanvasDrawVC.colorSelected(sender:)), for: [.touchDown])
-//            circlePalette.subviews[0].removeFromSuperview()
             paletteStack.addArrangedSubview(circlePalette)
             circlePalette.tag = index
         }
         self.view.addSubview(paletteStack)
         // Palette Stack View configurations here
         paletteStack.translatesAutoresizingMaskIntoConstraints = false
-        paletteStack.spacing = 15
+        paletteStack.spacing = 10
         paletteStack.distribution = .fillEqually
         
         
@@ -149,8 +149,8 @@ class CanvasDrawVC: UIViewController {
         neumorphCanvasBoard.topAnchor.constraint(equalTo: welcomeDescriptionLabel.bottomAnchor, constant: 10).isActive = true
         neumorphCanvasBoard.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
         neumorphCanvasBoard.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-        neumorphCanvasBoard.heightAnchor.constraint(greaterThanOrEqualToConstant: 200).isActive = true
-        neumorphCanvasBoard.heightAnchor.constraint(lessThanOrEqualToConstant: 350).isActive = true
+        neumorphCanvasBoard.heightAnchor.constraint(greaterThanOrEqualToConstant: 220).isActive = true
+        neumorphCanvasBoard.heightAnchor.constraint(lessThanOrEqualToConstant: 450).isActive = true
 //        neumorphCanvasBoard.heightAnchor.constraint(equalToConstant: 280).isActive = true
         canvas.backgroundColor = UIColor.clear
         
@@ -164,7 +164,9 @@ class CanvasDrawVC: UIViewController {
         paletteStack.topAnchor.constraint(equalTo: neumorphCanvasBoard.bottomAnchor, constant: 20).isActive = true
         paletteStack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
         paletteStack.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-        paletteStack.heightAnchor.constraint(greaterThanOrEqualToConstant: 10).isActive = true
+        paletteStack.heightAnchor.constraint(greaterThanOrEqualToConstant: 20).isActive = true
+        paletteStack.heightAnchor.constraint(lessThanOrEqualToConstant: 40).isActive = true
+
         paletteStack.setNeedsLayout()
         paletteStack.layoutIfNeeded()
         
@@ -172,7 +174,8 @@ class CanvasDrawVC: UIViewController {
         strokeSlider.topAnchor.constraint(equalTo: paletteStack.bottomAnchor, constant: 20).isActive = true
         strokeSlider.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
         strokeSlider.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-//        strokeSlider.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        strokeSlider.heightAnchor.constraint(greaterThanOrEqualToConstant: 15).isActive = true
+        strokeSlider.heightAnchor.constraint(lessThanOrEqualToConstant: 30).isActive = true
         strokeSlider.setNeedsLayout()
         strokeSlider.layoutIfNeeded()
         
@@ -198,7 +201,7 @@ class CanvasDrawVC: UIViewController {
         saveBtn.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 80).isActive = true
         saveBtn.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -80).isActive = true
         saveBtn.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10).isActive = true
-//        saveBtn.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        saveBtn.heightAnchor.constraint(equalToConstant: 30).isActive = true
         saveBtn.setNeedsLayout()
         saveBtn.layoutIfNeeded()
         
