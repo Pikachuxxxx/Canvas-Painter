@@ -18,7 +18,6 @@ public enum ButtonTags : Int{
 class CanvasDrawVC: UIViewController {
 
     let canvas = Canvas()
-    var CanvasBoard = NeumorphicVIew() // Getter kinda property Class Object for the Neumorphic Canvas Board for main drawing.
     // Neumorphic Canvas Board
     let neumorphCanvasBoard = NeumorphicVIew(frame: .zero)
 
@@ -50,9 +49,6 @@ class CanvasDrawVC: UIViewController {
         
 
         neumorphCanvasBoard.translatesAutoresizingMaskIntoConstraints = false
-    // TODO: Refactor Neumorphic view to a global property with public get and private set.
-        // A gloabl instance of Neumprphic Cavas board to get it's configuration basiacally acting as a getter property
-        CanvasBoard = neumorphCanvasBoard
         // Setting up canvas board settings
         canvas.translatesAutoresizingMaskIntoConstraints = false
         canvas.backgroundColor = neumorphCanvasBoard.backgroundColor
@@ -375,8 +371,10 @@ class CanvasDrawVC: UIViewController {
         switch sender.tag {
         case ButtonTags.SaveButton.rawValue:
             do {
-                print("Saving Canvas....")
-                self.CanvasBoard.saveImage()
+                if(canvas.lines.count > 0) {
+                    print("Saving Canvas....")
+                    self.neumorphCanvasBoard.saveImage()
+                }
                 break
             }
         case ButtonTags.ClearButton.rawValue:
@@ -397,8 +395,10 @@ class CanvasDrawVC: UIViewController {
             }
         case ButtonTags.ShareButton.rawValue:
             do {
-                // Sharing the canvas logic here
-                print("Sharing Canvas....")
+                if(canvas.lines.count > 0) {
+                    print("Saving Canvas....")
+                    // TODO: Sharing the canvas logic here
+                }
                 break
             }
         default:
