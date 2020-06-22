@@ -64,12 +64,22 @@ class CanvasDrawVC: UIViewController {
     // MARK:- View UI Objects
 
         // Welcome Text
-        let welcomeLabel = GetLabel(font: UIFont(name: "AvenirNext-DemiBold", size: 32)!, textColor: UIColor.black, Text: "Welcome!", viewToAdd: self.view)
+        let welcomeLabel = GetLabel(font: UIFont(name: "AvenirNext-DemiBold", size: 36)!, textColor: UIColor.black, Text: "Welcome!", viewToAdd: self.view)
+        welcomeLabel.minimumScaleFactor = 0.6
+        welcomeLabel.numberOfLines = 1
+        welcomeLabel.adjustsFontSizeToFitWidth = true
         // Description Text
         let welcomeDescriptionLabel = GetLabel(font: UIFont(name: "AvenirNext-Regular", size: 14)!, textColor: UIColor.black, Text: "Let your creativity flow, place your finger on the board and start drawing!", viewToAdd: self.view)
+        welcomeDescriptionLabel.minimumScaleFactor = 0.6
+        welcomeDescriptionLabel.numberOfLines = 2
+        welcomeDescriptionLabel.adjustsFontSizeToFitWidth = true
         
         // Share Button
         shareBtn = GetButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), titleText: "Share Canvas", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.ShareButton.rawValue, autoAdjustFont: true)
+        shareBtn.titleLabel!.minimumScaleFactor = 0.4
+        shareBtn.titleLabel!.numberOfLines = 1
+        shareBtn.titleLabel!.adjustsFontSizeToFitWidth = true
+
         // Clear Button
         clearBtn = GetButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), titleText: "Clear", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.ClearButton.rawValue, autoAdjustFont: true)
         // Undo Button
@@ -115,7 +125,7 @@ class CanvasDrawVC: UIViewController {
         welcomeStack.addArrangedSubview(welcomeLabel)
         welcomeStack.addArrangedSubview(shareBtn)
         welcomeStack.translatesAutoresizingMaskIntoConstraints = false
-        welcomeStack.spacing = 40
+        welcomeStack.spacing = 20
         paletteStack.distribution = .fillProportionally
         self.view.addSubview(welcomeStack)
         welcomeStack.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
@@ -129,7 +139,7 @@ class CanvasDrawVC: UIViewController {
         welcomeDescriptionLabel.topAnchor.constraint(equalTo: welcomeStack.bottomAnchor, constant: 8).isActive = true
         welcomeDescriptionLabel.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
         welcomeDescriptionLabel.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-//        welcomeDescriptionLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        welcomeDescriptionLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
         welcomeDescriptionLabel.setNeedsLayout()
         welcomeDescriptionLabel.layoutIfNeeded()
         
@@ -139,7 +149,7 @@ class CanvasDrawVC: UIViewController {
         neumorphCanvasBoard.topAnchor.constraint(equalTo: welcomeDescriptionLabel.bottomAnchor, constant: 10).isActive = true
         neumorphCanvasBoard.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
         neumorphCanvasBoard.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-        neumorphCanvasBoard.heightAnchor.constraint(greaterThanOrEqualToConstant: 280).isActive = true
+        neumorphCanvasBoard.heightAnchor.constraint(greaterThanOrEqualToConstant: 200).isActive = true
         neumorphCanvasBoard.heightAnchor.constraint(lessThanOrEqualToConstant: 350).isActive = true
 //        neumorphCanvasBoard.heightAnchor.constraint(equalToConstant: 280).isActive = true
         canvas.backgroundColor = UIColor.clear
@@ -154,7 +164,7 @@ class CanvasDrawVC: UIViewController {
         paletteStack.topAnchor.constraint(equalTo: neumorphCanvasBoard.bottomAnchor, constant: 20).isActive = true
         paletteStack.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
         paletteStack.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-        paletteStack.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        paletteStack.heightAnchor.constraint(greaterThanOrEqualToConstant: 10).isActive = true
         paletteStack.setNeedsLayout()
         paletteStack.layoutIfNeeded()
         
