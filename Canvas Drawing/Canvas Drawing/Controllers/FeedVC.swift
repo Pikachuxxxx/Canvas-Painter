@@ -78,16 +78,19 @@ class FeedVC:  UICollectionViewController, UICollectionViewDelegateFlowLayout   
             // retrieves image if already available in cache
             if let imageFromCache = imageCache.object(forKey: downloadURL as AnyObject) as? UIImage {
                 
-                self.downloadedImages.append(imageFromCache)
+                if(self.downloadedImages.count == 0){
+                    self.downloadedImages.append(imageFromCache)
+                }
                 return
             }
+            
             
             
             if(error != nil){
                 print(error.debugDescription)
                 return
             }
-                   print("url is \(downloadURL!)")
+//                   print("url is \(downloadURL!)")
             print("Download Started")
             self.getData(from: downloadURL!) { data, response, error in
                 guard let data = data, error == nil else { return }
