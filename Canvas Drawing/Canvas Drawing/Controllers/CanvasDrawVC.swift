@@ -473,13 +473,11 @@ class CanvasDrawVC: UIViewController {
                               ac.present()
                 }
             }
-            
             let progresssObserver = uploadTask.observe(.progress) { (taskSnapshot) in
                 print("Progress : \(taskSnapshot.debugDescription)")
             }
             let failureObserever = uploadTask.observe(.failure) { (taskSnapshot) in
                 print("Failure Snapshot : \(taskSnapshot.debugDescription)")
-
             }
        }else{
         let ac = UIAlertController(title: "Upload Failed!", message: "Your Canvas will be automatically uploaded when connected to internet.", preferredStyle: .alert)
@@ -493,20 +491,16 @@ class CanvasDrawVC: UIViewController {
     A class to check for internet connectivity.
  */
 public class InternetConnectionManager {
-
     private init() {}
     public static func isConnectedToNetwork() -> Bool {
-
         var zeroAddress = sockaddr_in()
         zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
         zeroAddress.sin_family = sa_family_t(AF_INET)
         guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
-
             $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
                 SCNetworkReachabilityCreateWithAddress(nil, $0)
             }
         }) else {
-
             return false
         }
         var flags = SCNetworkReachabilityFlags()
