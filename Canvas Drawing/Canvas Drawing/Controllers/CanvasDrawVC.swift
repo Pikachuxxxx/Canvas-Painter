@@ -453,13 +453,13 @@ class CanvasDrawVC: UIViewController {
             let storageRef  : StorageReference = storageVar.reference()
             
             // Data in memory
-            guard let data = uploadImg.pngData() else { return }
+             let data = uploadImg.pngData() 
 
             // Create a reference to the file you want to upload
-            let feedImagesRef = storageRef.child("FeedImages/\(customUID)")
+            let feedImagesRef = storageRef.child("FeedImages/\(customUID).png")
 
             // TODO:- Add alert controller to indicate the status of uploadTask
-            let uploadTask = feedImagesRef.putData(data, metadata: nil) { (metadata, error) in
+        let uploadTask = feedImagesRef.putData(data!, metadata: nil) { (metadata, error) in
                 if error != nil{
                  //Uh-oh, an error occurred!
     //                print("Error uploading... \(error.debugDescription)")
@@ -475,10 +475,10 @@ class CanvasDrawVC: UIViewController {
                               ac.present()
                 }
             }
-            let progresssObserver = uploadTask.observe(.progress) { (taskSnapshot) in
+        _ = uploadTask.observe(.progress) { (taskSnapshot) in
                 print("Progress : \(taskSnapshot.debugDescription)")
             }
-            let failureObserever = uploadTask.observe(.failure) { (taskSnapshot) in
+        _ = uploadTask.observe(.failure) { (taskSnapshot) in
                 print("Failure Snapshot : \(taskSnapshot.debugDescription)")
             }
        }else{
