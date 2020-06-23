@@ -9,11 +9,17 @@
 import Foundation
 import UIKit
 
+
 // MARK:- UIColor Extensions
 extension UIColor{
     // A Slight greyishshade of white for the creation of Neumoprphic effect
     static let offWhite = UIColor(red: 225 / 255, green: 225 / 255, blue: 235 / 255, alpha: 255 / 255)
 }
+//MARK:- UIImageView Extensions
+extension UIImageView{
+  
+}
+
 // MARK:- UIImage Extensions
 extension UIImage {
     /**

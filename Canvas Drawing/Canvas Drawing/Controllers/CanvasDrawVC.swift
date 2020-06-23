@@ -407,7 +407,9 @@ class CanvasDrawVC: UIViewController {
                 if(canvas.lines.count > 0) {
                     print("Sharing Canvas....")
                     // TODO: Sharing the canvas logic here
-                    FBUploadManager(userID: "\(canvas)", imageToUpload: neumorphCanvasBoard.takeSnapshot()!)
+                    presentWithInputAndUpload()
+                  
+                    
                 }
                 break
             }
@@ -454,7 +456,7 @@ class CanvasDrawVC: UIViewController {
             guard let data = uploadImg.pngData() else { return }
 
             // Create a reference to the file you want to upload
-            let feedImagesRef = storageRef.child("FeedImages/\(customUID).png")
+            let feedImagesRef = storageRef.child("FeedImages/\(customUID)")
 
             // TODO:- Add alert controller to indicate the status of uploadTask
             let uploadTask = feedImagesRef.putData(data, metadata: nil) { (metadata, error) in
@@ -484,6 +486,31 @@ class CanvasDrawVC: UIViewController {
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         ac.present()
         }
+    }
+    
+    func presentWithInputAndUpload(){
+        var textField : UITextField?
+        //1. Create the alert controller.
+        let alert = UIAlertController(title: "Nice Work!!!", message: "Enter a name for your canvas Drawing", preferredStyle: .alert)
+
+        //2. Add the text field. You can configure it however you need.
+        alert.addTextField { (textField) in
+            if(textField.text == nil){
+                
+            }
+            textField.text = "Canvas Title..."
+        }
+
+        // 3. Grab the value from the text field, and print it when the user clicks OK.
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+            textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+            print("Text field: \(String(describing: textField!.text!))")
+            
+            self.FBUploadManager(userID: "\(String(describing: textField!.text!))", imageToUpload: self.neumorphCanvasBoard.takeSnapshot()!)
+        }))
+
+        // 4. Present the alert.
+        self.present(alert, animated: true, completion: nil)
     }
 }
 

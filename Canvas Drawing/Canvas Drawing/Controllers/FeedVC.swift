@@ -7,6 +7,13 @@
 //
 
 import UIKit
+import Foundation
+
+
+
+
+
+
 
 class FeedVC:  UICollectionViewController, UICollectionViewDelegateFlowLayout   {
 
@@ -29,6 +36,7 @@ class FeedVC:  UICollectionViewController, UICollectionViewDelegateFlowLayout   
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! FeedCell
+        cell.img.image = UIImage(named: "Feed Icon")
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -41,6 +49,9 @@ class FeedVC:  UICollectionViewController, UICollectionViewDelegateFlowLayout   
 }
 
 class FeedCell :  UICollectionViewCell{
+   
+    var img = UIImageView()
+    
     override init(frame: CGRect) {
         super.init(frame : frame)
         Setup()
@@ -51,11 +62,9 @@ class FeedCell :  UICollectionViewCell{
     }
     
     func Setup(){
-        self.backgroundColor = UIColor.red
         self.layer.cornerRadius = 25
-        let img = UIImageView()
         self.contentView.addSubview(img)
-        img.image = UIImage(named: "")
+        img.image = UIImage(named: "Placeholder")
         img.translatesAutoresizingMaskIntoConstraints = false
         
         img.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
@@ -66,3 +75,6 @@ class FeedCell :  UICollectionViewCell{
     
     
 }
+
+
+  
