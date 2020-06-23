@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 public enum ButtonTags : Int{
     case SaveButton = 0
@@ -35,8 +36,19 @@ class CanvasDrawVC: UIViewController {
     let welcomeStack = UIStackView()
     let clearUndoStack = UIStackView()
     
+    //MARK:- Firebase Initialisations
+    
+    // Get a reference to the storage service using the default Firebase App
+    let storageVar : Storage = Storage.storage()
+
+    
+    
+    
+
+    
     //MARK:- View Lifecycle Methods
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         /**
@@ -398,6 +410,7 @@ class CanvasDrawVC: UIViewController {
                 if(canvas.lines.count > 0) {
                     print("Saving Canvas....")
                     // TODO: Sharing the canvas logic here
+                    FBUploadManager(userID: "\(canvas)", imageToUpload: neumorphCanvasBoard.takeSnapshot()!)
                 }
                 break
             }
@@ -427,5 +440,55 @@ class CanvasDrawVC: UIViewController {
     */
     @objc func colorSelected(sender : UIButton){
     canvas.strokeColor  = colorPalette[sender.tag]
+    }
+    
+    // MARK:- Firebase Implementations
+    /**
+     This Function manages Firebase(FB uploading into firebase storage
+     */
+    func FBUploadManager(userID customUID : String, imageToUpload uploadImg : UIImage){
+        
+        // Create a storage reference from our storage service
+        let storageRef  : StorageReference = storageVar.reference()
+        
+        // Data in memory
+        guard let data = uploadImg.pngData() else { return }
+
+        // Create a reference to the file you want to upload
+        let feedImagesRef = storageRef.child("FeedImages/\(customUID).png")
+
+        // TODO:- Add alert controller to indicate the status of uploadTask
+        // Upload the file to the path "images/rivers.jpg"
+        let uploadTask = feedImagesRef.putData(data, metadata: nil) { (metadata, error) in
+            if error != nil{
+             //Uh-oh, an error occurred!
+                print("Erroor uploading... \(error.debugDescription)")
+                let ac = UIAlertController(title: "Upload Failed!", message: "Your   canvas was failed to upload plese try again. Error : \(error!.localizedDescription)", preferredStyle: .alert)
+                                       ac.addAction(UIAlertAction(title: "OK", style: .default))
+                                       ac.present()
+                return
+            }else{
+                
+                // Congrats on successful upload
+                print("Upload Successful !!!!")
+                
+                let ac = UIAlertController(title: "Upload Successful!", message: "Your canvas has been succesfully uploaded and will be shared with others.", preferredStyle: .alert)
+                          ac.addAction(UIAlertAction(title: "OK", style: .default))
+                          ac.present()
+                
+                
+                
+//        // Metadata contains file metadata such as size, content-type.
+//                 let size = metadata?.size
+//               // You can also access to download URL after upload.
+//               feedImagesRef.downloadURL { (url, error) in
+//                 guard let downloadURL = url else {
+//                       // Uh-oh, an error occurred!
+//                       return
+//                     }
+//                 }
+            }
+       
+        }
     }
 }
