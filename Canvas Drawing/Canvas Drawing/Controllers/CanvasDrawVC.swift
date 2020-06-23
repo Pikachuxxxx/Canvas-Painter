@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import SystemConfiguration
 
 public enum ButtonTags : Int{
     case SaveButton = 0
@@ -40,10 +41,6 @@ class CanvasDrawVC: UIViewController {
     
     // Get a reference to the storage service using the default Firebase App
     let storageVar : Storage = Storage.storage()
-
-    
-    
-    
 
     
     //MARK:- View Lifecycle Methods
@@ -408,7 +405,7 @@ class CanvasDrawVC: UIViewController {
         case ButtonTags.ShareButton.rawValue:
             do {
                 if(canvas.lines.count > 0) {
-                    print("Saving Canvas....")
+                    print("Sharing Canvas....")
                     // TODO: Sharing the canvas logic here
                     FBUploadManager(userID: "\(canvas)", imageToUpload: neumorphCanvasBoard.takeSnapshot()!)
                 }
@@ -448,47 +445,76 @@ class CanvasDrawVC: UIViewController {
      */
     func FBUploadManager(userID customUID : String, imageToUpload uploadImg : UIImage){
         
-        // Create a storage reference from our storage service
-        let storageRef  : StorageReference = storageVar.reference()
-        
-        // Data in memory
-        guard let data = uploadImg.pngData() else { return }
+       if(InternetConnectionManager.isConnectedToNetwork()){
+            
+            // Create a storage reference from our storage service
+            let storageRef  : StorageReference = storageVar.reference()
+            
+            // Data in memory
+            guard let data = uploadImg.pngData() else { return }
 
-        // Create a reference to the file you want to upload
-        let feedImagesRef = storageRef.child("FeedImages/\(customUID).png")
+            // Create a reference to the file you want to upload
+            let feedImagesRef = storageRef.child("FeedImages/\(customUID).png")
 
-        // TODO:- Add alert controller to indicate the status of uploadTask
-        // Upload the file to the path "images/rivers.jpg"
-        let uploadTask = feedImagesRef.putData(data, metadata: nil) { (metadata, error) in
-            if error != nil{
-             //Uh-oh, an error occurred!
-                print("Erroor uploading... \(error.debugDescription)")
-                let ac = UIAlertController(title: "Upload Failed!", message: "Your   canvas was failed to upload plese try again. Error : \(error!.localizedDescription)", preferredStyle: .alert)
-                                       ac.addAction(UIAlertAction(title: "OK", style: .default))
-                                       ac.present()
-                return
-            }else{
-                
-                // Congrats on successful upload
-                print("Upload Successful !!!!")
-                
-                let ac = UIAlertController(title: "Upload Successful!", message: "Your canvas has been succesfully uploaded and will be shared with others.", preferredStyle: .alert)
-                          ac.addAction(UIAlertAction(title: "OK", style: .default))
-                          ac.present()
-                
-                
-                
-//        // Metadata contains file metadata such as size, content-type.
-//                 let size = metadata?.size
-//               // You can also access to download URL after upload.
-//               feedImagesRef.downloadURL { (url, error) in
-//                 guard let downloadURL = url else {
-//                       // Uh-oh, an error occurred!
-//                       return
-//                     }
-//                 }
+            // TODO:- Add alert controller to indicate the status of uploadTask
+            let uploadTask = feedImagesRef.putData(data, metadata: nil) { (metadata, error) in
+                if error != nil{
+                 //Uh-oh, an error occurred!
+    //                print("Error uploading... \(error.debugDescription)")
+                    let ac = UIAlertController(title: "Upload Failed!", message: "Your   canvas was failed to upload please try again. Error : \(error!.localizedDescription)", preferredStyle: .alert)
+                                           ac.addAction(UIAlertAction(title: "OK", style: .default))
+                                           ac.present()
+                }else{
+                    // Congrats on successful upload
+                    print("Upload Successful !!!!")
+                    
+                    let ac = UIAlertController(title: "Upload Successful!", message: "Your canvas has been succesfully uploaded and will be shared with others.", preferredStyle: .alert)
+                              ac.addAction(UIAlertAction(title: "OK", style: .default))
+                              ac.present()
+                }
             }
-       
+            
+            let progresssObserver = uploadTask.observe(.progress) { (taskSnapshot) in
+                print("Progress : \(taskSnapshot.debugDescription)")
+            }
+            let failureObserever = uploadTask.observe(.failure) { (taskSnapshot) in
+                print("Failure Snapshot : \(taskSnapshot.debugDescription)")
+
+            }
+       }else{
+        let ac = UIAlertController(title: "Upload Failed!", message: "Your Canvas will be automatically uploaded when connected to internet.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        ac.present()
         }
+    }
+}
+
+/**
+    A class to check for internet connectivity.
+ */
+public class InternetConnectionManager {
+
+    private init() {}
+    public static func isConnectedToNetwork() -> Bool {
+
+        var zeroAddress = sockaddr_in()
+        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                SCNetworkReachabilityCreateWithAddress(nil, $0)
+            }
+        }) else {
+
+            return false
+        }
+        var flags = SCNetworkReachabilityFlags()
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+            return false
+        }
+        let isReachable = (flags.rawValue & UInt32(kSCNetworkFlagsReachable)) != 0
+        let needsConnection = (flags.rawValue & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
+        return (isReachable && !needsConnection)
     }
 }
