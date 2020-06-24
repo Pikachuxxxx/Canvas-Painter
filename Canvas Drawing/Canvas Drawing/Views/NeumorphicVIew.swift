@@ -47,6 +47,12 @@ class NeumorphicVIew: UIView {
         lightShadow.shadowRadius = shadowRadius
         self.layer.insertSublayer(lightShadow, at: 0)
     }
+    /**
+            Saves the current View as an Image into the photo library
+     
+         - Parameter: None
+         - Returns: None
+     */
     func saveImage() {
         let selector = #selector(self.onImageSaved(_:error:contextInfo:))
         takeSnapshot()?.saveToPhotoLibrary(self, selector)

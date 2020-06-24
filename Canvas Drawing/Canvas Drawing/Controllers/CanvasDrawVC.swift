@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import SystemConfiguration
 
 public enum ButtonTags : Int{
     case SaveButton = 0
@@ -35,8 +37,15 @@ class CanvasDrawVC: UIViewController {
     let welcomeStack = UIStackView()
     let clearUndoStack = UIStackView()
     
+    //MARK:- Firebase Initialisations
+    
+    // Get a reference to the storage service using the default Firebase App
+    let storageVar : Storage = Storage.storage()
+
+    
     //MARK:- View Lifecycle Methods
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         /**
@@ -396,8 +405,11 @@ class CanvasDrawVC: UIViewController {
         case ButtonTags.ShareButton.rawValue:
             do {
                 if(canvas.lines.count > 0) {
-                    print("Saving Canvas....")
+                    print("Sharing Canvas....")
                     // TODO: Sharing the canvas logic here
+                    presentWithInputAndUpload()
+                  
+                    
                 }
                 break
             }
@@ -427,5 +439,103 @@ class CanvasDrawVC: UIViewController {
     */
     @objc func colorSelected(sender : UIButton){
     canvas.strokeColor  = colorPalette[sender.tag]
+    }
+    
+    // MARK:- Firebase Implementations
+    /**
+     This Function manages Firebase(FB uploading into firebase storage
+     */
+    func FBUploadManager(userID customUID : String, imageToUpload uploadImg : UIImage){
+        
+       if(InternetConnectionManager.isConnectedToNetwork()){
+            
+            // Create a storage reference from our storage service
+            let storageRef  : StorageReference = storageVar.reference()
+            
+            // Data in memory
+             let data = uploadImg.pngData() 
+
+            // Create a reference to the file you want to upload
+            let feedImagesRef = storageRef.child("FeedImages/\(customUID).png")
+
+            // TODO:- Add alert controller to indicate the status of uploadTask
+        let uploadTask = feedImagesRef.putData(data!, metadata: nil) { (metadata, error) in
+                if error != nil{
+                 //Uh-oh, an error occurred!
+    //                print("Error uploading... \(error.debugDescription)")
+                    let ac = UIAlertController(title: "Upload Failed!", message: "Your   canvas was failed to upload please try again. Error : \(error!.localizedDescription)", preferredStyle: .alert)
+                                           ac.addAction(UIAlertAction(title: "OK", style: .default))
+                                           ac.present()
+                }else{
+                    // Congrats on successful upload
+                    print("Upload Successful !!!!")
+                    
+                    let ac = UIAlertController(title: "Upload Successful!", message: "Your canvas has been succesfully uploaded and will be shared with others.", preferredStyle: .alert)
+                              ac.addAction(UIAlertAction(title: "OK", style: .default))
+                              ac.present()
+                }
+            }
+        _ = uploadTask.observe(.progress) { (taskSnapshot) in
+                print("Progress : \(taskSnapshot.debugDescription)")
+            }
+        _ = uploadTask.observe(.failure) { (taskSnapshot) in
+                print("Failure Snapshot : \(taskSnapshot.debugDescription)")
+            }
+       }else{
+        let ac = UIAlertController(title: "Upload Failed!", message: "Your Canvas will be automatically uploaded when connected to internet.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        ac.present()
+        }
+    }
+    
+    func presentWithInputAndUpload(){
+        var textField : UITextField?
+        //1. Create the alert controller.
+        let alert = UIAlertController(title: "Nice Work!!!", message: "Enter a name for your canvas Drawing", preferredStyle: .alert)
+
+        //2. Add the text field. You can configure it however you need.
+        alert.addTextField { (textField) in
+            if(textField.text == nil){
+                
+            }
+            textField.text = "Canvas Title..."
+        }
+
+        // 3. Grab the value from the text field, and print it when the user clicks OK.
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+            textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+            print("Text field: \(String(describing: textField!.text!))")
+            
+            self.FBUploadManager(userID: "\(String(describing: textField!.text!))", imageToUpload: self.neumorphCanvasBoard.takeSnapshot()!)
+        }))
+
+        // 4. Present the alert.
+        self.present(alert, animated: true, completion: nil)
+    }
+}
+
+/**
+    A class to check for internet connectivity.
+ */
+public class InternetConnectionManager {
+    private init() {}
+    public static func isConnectedToNetwork() -> Bool {
+        var zeroAddress = sockaddr_in()
+        zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
+        zeroAddress.sin_family = sa_family_t(AF_INET)
+        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
+            $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {
+                SCNetworkReachabilityCreateWithAddress(nil, $0)
+            }
+        }) else {
+            return false
+        }
+        var flags = SCNetworkReachabilityFlags()
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+            return false
+        }
+        let isReachable = (flags.rawValue & UInt32(kSCNetworkFlagsReachable)) != 0
+        let needsConnection = (flags.rawValue & UInt32(kSCNetworkFlagsConnectionRequired)) != 0
+        return (isReachable && !needsConnection)
     }
 }
