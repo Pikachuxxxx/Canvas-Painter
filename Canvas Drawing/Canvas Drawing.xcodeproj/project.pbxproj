@@ -122,8 +122,8 @@
 		87F112E0249F798400CEBE56 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				8706260C249D32D50036FD96 /* CanvasDrawVC.swift */,
 				87FE11C9249E56FB00D20AEA /* MainTabBarVC.swift */,
+				8706260C249D32D50036FD96 /* CanvasDrawVC.swift */,
 				87FE11CB249E586200D20AEA /* FeedVC.swift */,
 			);
 			path = Controllers;

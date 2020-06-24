@@ -9,13 +9,13 @@
 import UIKit
 import Firebase
 
+// An enum to identify the Buttons in the view using tags.
 public enum ButtonTags : Int{
     case SaveButton = 0
     case ClearButton
     case UndoButton
     case ShareButton
 }
-
 class CanvasDrawVC: UIViewController {
 
     let canvas = Canvas()
@@ -24,19 +24,20 @@ class CanvasDrawVC: UIViewController {
     // UI creation  Object
     let createUI = UICreator()
 
+    // UI objects
     var shareBtn : UIButton! = nil
     var clearBtn : UIButton! = nil
     var undoBtn : UIButton! = nil
     var saveBtn : UIButton! = nil
     let strokeSlider = UISlider()
     
-    
-    // The canvas colour palette colours
-    let colorPalette : [UIColor] = [UIColor.black,UIColor.cyan,UIColor.green,UIColor.orange,UIColor.purple,UIColor.red,UIColor.yellow,UIColor.white]
-
+    // Stack Views
     let paletteStack = UIStackView()
     let welcomeStack = UIStackView()
     let clearUndoStack = UIStackView()
+    
+    // The canvas colour palette colours
+    let colorPalette : [UIColor] = [UIColor.black,UIColor.cyan,UIColor.green,UIColor.orange,UIColor.purple,UIColor.red,UIColor.yellow,UIColor.white]
     
     //MARK:- Firebase Initialisations
     
@@ -94,7 +95,6 @@ class CanvasDrawVC: UIViewController {
         saveBtn = createUI.GetButton(titleColor: #colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1), titleText: "Save Canvas", viewToAdd: self.view, buttonBGColor: nil, buttongTag: ButtonTags.SaveButton.rawValue, autoAdjustFont: true)
         
         // Adding color palatte buttons here
-    // TODO: Embed the palette buttons in a Stack View
         for (index,color) in colorPalette.enumerated(){
             let circlePalette = UIButton(type: .roundedRect)
             circlePalette.showsTouchWhenHighlighted = true
@@ -105,6 +105,10 @@ class CanvasDrawVC: UIViewController {
             circlePalette.tag = index
         }
         self.view.addSubview(paletteStack)
+    
+    // MARK:- UI Objects Configurations
+
+        
         // Palette Stack View configurations here
         paletteStack.translatesAutoresizingMaskIntoConstraints = false
         paletteStack.spacing = 10
@@ -112,7 +116,6 @@ class CanvasDrawVC: UIViewController {
         
         
     // Slider (Neumorphic style)
-        // TODO: Make a customisable standalone function
         strokeSlider.minimumValue = 1
         strokeSlider.maximumValue = 10
         strokeSlider.isContinuous = true
@@ -276,10 +279,7 @@ class CanvasDrawVC: UIViewController {
             do {
                 if(canvas.lines.count > 0) {
                     print("Sharing Canvas....")
-                    // TODO: Sharing the canvas logic here
                     presentWithInputAndUpload()
-                  
-                    
                 }
                 break
             }
@@ -328,7 +328,6 @@ class CanvasDrawVC: UIViewController {
             // Create a reference to the file you want to upload
             let feedImagesRef = storageRef.child("FeedImages/\(customUID).png")
 
-            // TODO:- Add alert controller to indicate the status of uploadTask
         let uploadTask = feedImagesRef.putData(data!, metadata: nil) { (metadata, error) in
                 if error != nil{
                  //Uh-oh, an error occurred!

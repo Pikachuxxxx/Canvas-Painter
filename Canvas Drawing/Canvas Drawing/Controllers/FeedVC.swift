@@ -15,7 +15,7 @@ class FeedVC:  UICollectionViewController, UICollectionViewDelegateFlowLayout   
     
     var folderList: [StorageReference]?
     var storage = Storage.storage()
-    var downloadedImages : [UIImage] = []
+    var downloadedImages : [UIImage?] = []
     let cellId = "FeedCell"
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,13 +38,12 @@ class FeedVC:  UICollectionViewController, UICollectionViewDelegateFlowLayout   
         super.viewDidLoad()
         self.collectionView.backgroundColor = .offWhite
         collectionView.delegate = self
-//        collectionView.datasource = self
         collectionView.register(FeedCell.self, forCellWithReuseIdentifier: cellId)
     }
     
     //
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return downloadedImages.count ?? 5
+        return downloadedImages.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -82,18 +81,15 @@ class FeedVC:  UICollectionViewController, UICollectionViewDelegateFlowLayout   
                 }
                 return
             }
-            
-            
-            
+
             if(error != nil){
                 print(error.debugDescription)
                 return
             }
-//                   print("url is \(downloadURL!)")
             print("Download Started")
             self.getData(from: downloadURL!) { data, response, error in
                 guard let data = data, error == nil else { return }
-//                print(response?.suggestedFilename ?? downloadURL!.lastPathComponent)
+                print(response?.suggestedFilename ?? downloadURL!.lastPathComponent)
                 print("Download Finished")
                 DispatchQueue.main.async() { [weak self] in
                     let imageToCache = UIImage(data: data)
@@ -130,7 +126,7 @@ class FeedCell :  UICollectionViewCell{
         self.contentView.addSubview(img)
         img.image = UIImage(named: "Placeholder")
         img.translatesAutoresizingMaskIntoConstraints = false
-        
+        // ImageView Constraints
         img.topAnchor.constraint(equalTo: self.contentView.topAnchor).isActive = true
         img.leadingAnchor.constraint(equalTo: self.contentView.leadingAnchor).isActive = true
         img.trailingAnchor.constraint(equalTo: self.contentView.trailingAnchor).isActive = true
