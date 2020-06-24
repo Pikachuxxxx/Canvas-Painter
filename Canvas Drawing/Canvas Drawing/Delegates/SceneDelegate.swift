@@ -17,16 +17,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+        // Initialising the VCs
         let mainTbaBarController = MainTabBarVC()
         let canvasVC = CanvasDrawVC()
         let layout = UICollectionViewFlowLayout()
         let feedVC = FeedVC(collectionViewLayout: layout)
         
+        // Setting UP tabbar names
         canvasVC.title = "Canvas"
         feedVC.title = "Feed"
         feedVC.tabBarItem.image = UIImage(named: "Feed Icon")
 
+        // Adding Image icons for tab bar items
         canvasVC.tabBarItem.title = "Test title"
+        mainTbaBarController.tabBarItem.image = UIImage(named: "Canvas Icon")
+        
+        // Setting up the VCs control and hierarchy
         mainTbaBarController.title = "Main TabBarVC"        
         mainTbaBarController.setViewControllers([canvasVC,feedVC], animated: true)
         guard let windowScene = (scene as? UIWindowScene) else { return }

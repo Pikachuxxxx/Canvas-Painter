@@ -84,6 +84,28 @@ extension UIView{
         return image
     }
     /**
+            Saves the current View as an Image into the photo library
+     
+         - Parameter: None
+         - Returns: None
+     */
+    func saveImage() {
+        let selector = #selector(self.onImageSaved(_:error:contextInfo:))
+        takeSnapshot()?.saveToPhotoLibrary(self, selector)
+    }
+
+    @objc private func onImageSaved(_ image: UIImage, error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            ac.present()
+        } else {
+            let ac = UIAlertController(title: "Saved!", message: "Your image has been saved to your photos.", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            ac.present()
+        }
+    }
+    /**
         Creates the mask of  the given View (UIView) with the speicified CGRect bounds, or a inverse mask if specified.
      
       - Parameter withRect : The rectangle bounds of the View that we desire to mask.
