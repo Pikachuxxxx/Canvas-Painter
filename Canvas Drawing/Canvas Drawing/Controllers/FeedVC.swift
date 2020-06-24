@@ -72,7 +72,6 @@ class FeedVC:  UICollectionViewController, UICollectionViewDelegateFlowLayout   
     
     func load(storageRef: StorageReference) {
         
-        var request : URLRequest!
         storageRef.downloadURL(completion: {(downloadURL,error) in
             
             // retrieves image if already available in cache

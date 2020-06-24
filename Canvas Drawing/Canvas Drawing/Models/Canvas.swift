@@ -9,8 +9,12 @@
 import Foundation
 import UIKit
 
+/**
+    A UIView class  to to draw any kinds of drawings.
+ 
+        - Parameter:  we can set the size, color, width of the brush to draw on the canvas.
+ */
 class Canvas: UIView {
-    
     var strokeColor : UIColor = UIColor.black
     var strokeWidth : Float = 1
     override init(frame: CGRect) {

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -13,6 +13,7 @@
 		87062612249D32D70036FD96 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 87062611249D32D70036FD96 /* Assets.xcassets */; };
 		87062615249D32D70036FD96 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 87062613249D32D70036FD96 /* LaunchScreen.storyboard */; };
 		8706261F249D33400036FD96 /* NeumorphicVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8706261E249D33400036FD96 /* NeumorphicVIew.swift */; };
+		8796A89324A3AA08003FED9A /* InternetConnectionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8796A89224A3AA08003FED9A /* InternetConnectionManager.swift */; };
 		87B7E07A24A1C04900513DD8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 87B7E07924A1C04900513DD8 /* GoogleService-Info.plist */; };
 		87F112E2249F79B200CEBE56 /* Canvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F112E1249F79B200CEBE56 /* Canvas.swift */; };
 		87F112E4249F7A1200CEBE56 /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F112E3249F7A1200CEBE56 /* Line.swift */; };
@@ -34,6 +35,7 @@
 		87062614249D32D70036FD96 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		87062616249D32D70036FD96 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8706261E249D33400036FD96 /* NeumorphicVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NeumorphicVIew.swift; sourceTree = "<group>"; };
+		8796A89224A3AA08003FED9A /* InternetConnectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternetConnectionManager.swift; sourceTree = "<group>"; };
 		87B7E07924A1C04900513DD8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		87F112E1249F79B200CEBE56 /* Canvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Canvas.swift; sourceTree = "<group>"; };
 		87F112E3249F7A1200CEBE56 /* Line.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
@@ -62,7 +64,6 @@
 				3D35A465E99F77A228704162 /* Pods-Canvas Drawing.debug.xcconfig */,
 				6D7E1AB95F97BEFA7B7CB398 /* Pods-Canvas Drawing.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -113,6 +114,7 @@
 			children = (
 				87F112E1249F79B200CEBE56 /* Canvas.swift */,
 				87F112E3249F7A1200CEBE56 /* Line.swift */,
+				8796A89224A3AA08003FED9A /* InternetConnectionManager.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -267,6 +269,7 @@
 				87FE11CA249E56FC00D20AEA /* MainTabBarVC.swift in Sources */,
 				8706260D249D32D50036FD96 /* CanvasDrawVC.swift in Sources */,
 				87F112E4249F7A1200CEBE56 /* Line.swift in Sources */,
+				8796A89324A3AA08003FED9A /* InternetConnectionManager.swift in Sources */,
 				87062609249D32D50036FD96 /* AppDelegate.swift in Sources */,
 				87F112E8249FA7A900CEBE56 /* UICreator.swift in Sources */,
 				8706260B249D32D50036FD96 /* SceneDelegate.swift in Sources */,
